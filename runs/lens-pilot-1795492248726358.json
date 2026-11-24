@@ -1,0 +1,27 @@
+{
+  "stage": "pilot",
+  "app": "mm-manifoldmotion-lens",
+  "call_id": "fc-01M85TTZFGTVS90F1JT829X4Z3",
+  "gpu": [
+    "L4",
+    "T4"
+  ],
+  "launched_at": 1795492248.7263584,
+  "launched_utc": "2026-11-24T03:50:48Z",
+  "reserved_usd": 0.03326685,
+  "result": {
+    "stage": "pilot",
+    "seed": 0,
+    "steps": [
+      64000
+    ],
+    "seconds": 31.569687567,
+    "worker_seconds": 26.35905238,
+    "computed": 1,
+    "skipped": 0,
+    "coordinator_started_at": 1795492255.6333425,
+    "finished_at": 1795492287.203036,
+    "estimated_usd": 0.006452480487086495,
+    "spend_with_startup_reserve_usd": 0.011818830487086497
+  }
+}

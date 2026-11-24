@@ -1,0 +1,25 @@
+{
+ "experiments": [
+  {
+   "title": "Motion through depth in the trained network",
+   "date": "2026-11-24",
+   "question": "How does the trained ResNet-20 move the 10,000 test images through Fisher space from one block to the next, and what can be measured about it?",
+   "status": "measured",
+   "path": "experiments/depth.html"
+  },
+  {
+   "title": "Motion over training",
+   "date": "2026-11-24",
+   "question": "How does the motion through depth change as the network trains, and how fast does each site's cloud move between checkpoints?",
+   "status": "measured",
+   "path": "experiments/training.html"
+  },
+  {
+   "title": "What can be measured in a nine-dimensional blob: calibration",
+   "date": "2026-11-24",
+   "question": "Which kinematic quantities can be recovered from a cloud shaped like the real one, and how should the released ones be read? With the checks on the lens.",
+   "status": "calibration",
+   "path": "experiments/calibration.html"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "stage": "pilot",
+  "app": "mm-manifoldmotion-lens",
+  "call_id": "fc-01M85TH9NT8ZBBXAVAMENQNB33",
+  "gpu": "L4",
+  "launched_at": 1795491931.4847326,
+  "launched_utc": "2026-11-24T03:45:31Z",
+  "reserved_usd": 0.03326685,
+  "result": {
+    "error": "RemoteError('Function call was cancelled by user or a failure.')"
+  }
+}

@@ -1,0 +1,193 @@
+<h1>What can be measured in a nine-dimensional blob: calibration</h1>
+<p class="xq">Which of the planned kinematic quantities can a graph estimator recover from a cloud shaped like the real
+lens clouds, and how should the released ones be read?</p>
+<p class="xmeta">A synthetic fixture matched to the lens cloud at b7, under maps whose derivatives are known exactly;
+two fixture seeds; the same estimator, neighbourhood size (k = 256) and kernel as the real run. The gates and
+tolerances below were frozen before the 40-checkpoint run.</p>
+
+<div class="answer">
+<p><b>Answer.</b> In a fixture shaped like the real cloud, four statistics of the fitted slope (the largest log gain,
+the expansion rate, the strain rate and the spin) are recovered within their tolerances where gates on held-out
+prediction pass, provided the fit has a free intercept. The smallest stretches, the volume change $\log J$ and
+everything that depends on them are not: once the endpoints carry scatter, a map that collapses one direction
+completely is not flagged as rank-deficient. The relative-motion budget is a different kind of quantity, an in-sample
+decomposition released as measured rather than a gated recovery of the map. The held-out score runs above its
+known-map reference under scatter and is read only against its baselines. The lens passes three exact checks at all
+{{f:lens.n}} checkpoints.</p>
+</div>
+
+<h2 id="fixture">The matched fixture</h2>
+<p>The source cloud is a nine-dimensional anisotropic Gaussian blob on the same sphere, built so that its local
+second-moment spectrum, neighbourhood radius, one-sidedness and kernel truncation resemble the lens cloud at b7. A
+smooth one-to-one map with known differential moves it; independent scatter is added to every image's endpoint at four
+levels (0.3, 0.6, 1.0 and 1.5, in units of the mapped cloud's median neighbourhood radius divided by $\sqrt{18}$). Contrasts use the same source:
+targets shuffled between images, a rank-8 map (one direction collapsed exactly), a near-singular map, the weakest
+direction carrying the strongest compression, a collapse towards simplex vertices, a fold, a strongly curved map, the
+identity and a rotation.</p>
+<figure class="xfig" id="fig-fx">
+  <div class="xfig-title">Local spectrum · fixture against the lens cloud at b7 (step 64,000) · median over points</div>
+  <div class="xfig-plot" data-h="250"></div>
+  <figcaption><b>Read:</b> eigenvalues of the local second moment, relative to the largest, for the real cloud at b7
+  and for the fixture's source cloud. <b>Shows:</b> the fixture decays over all nine directions without a gap, as the real cloud does, though it is flatter in the middle directions; its median radius is
+  {{f:fx.radius}} (10th to 90th percentile {{f:fx.radius.lo}} to {{f:fx.radius.hi}}) against {{f:radius.b7}} at b7, and
+  its median one-sidedness {{f:fx.onesided}} against {{f:onesided.min}} to {{f:onesided.max}} on the real sites.</figcaption>
+</figure>
+
+<h2 id="anchor">A fit through the image itself is biased</h2>
+<p>The planned estimator regressed each neighbour's next-site offset on its present offset with the line forced
+through the image itself (the anchor). Endpoint scatter moves the anchor, and that movement is shared by all of its
+neighbours' offsets. A forced fit absorbs this shared shift into the slope; a fit with a free constant term does
+not.</p>
+<figure class="xfig" id="fig-anchor">
+  <div class="xfig-title">Error of the fitted linear map · fixture, smooth map, scatter level 0.6 · two seeds</div>
+  <div class="xfig-plot" data-h="230"></div>
+  <figcaption><b>Read:</b> median over points of the relative error of the fitted map, $\mathrm{tr}(D G D^\top) /
+  \mathrm{tr}(F G F^\top)$ with $D$ = estimate − truth and $G$ the local second moment; "endpoint" scatter moves each
+  image, "edge" scatter perturbs each neighbour pair independently with the same variance. <b>Shows:</b> under
+  endpoint scatter the forced fit's error is {{f:fx.anch.end}} against {{f:fx.ic.end}} for the free intercept (seed 1:
+  {{f:fx.anch.end.s1}} against {{f:fx.ic.end.s1}}); with edge scatter the two agree ({{f:fx.anch.edge}},
+  {{f:fx.ic.edge}}). Every released regression field uses the free intercept.</figcaption>
+</figure>
+<p>A diagnostic comparison on the real cloud shows the same direction. At stem→b1 in the trained network, on the
+images where both are defined, the forced fit attributes {{f:anch.fit.stem}} of the relative motion to its fitted
+linear part, while the released free-intercept slope accounts for {{f:slope.share.stem}}. The forced-fit numbers are
+kept in the files only as diagnostics (<code>diag:anchored:</code> keys) and are not results.</p>
+
+<h2 id="optimism">The held-out score is optimistic</h2>
+<p>The held-out score is one minus the squared error of predicting held-out neighbours' next-site offsets, over their
+squared size. On the fixture a reference score can be computed from the known map, using its numerical derivative
+in place of the fitted map. It is a reference, not a ceiling: on the clean smooth map the fit scores {{f:fx.ho.clean}}
+against a reference of {{f:fx.or.clean}}.</p>
+<figure class="xfig" id="fig-opt">
+  <div class="xfig-title">Held-out score against the known-map reference · fixture, smooth map · by scatter level · two seeds</div>
+  <div class="xfig-plot" data-h="240"></div>
+  <figcaption><b>Read:</b> median over points of the free-intercept fit's held-out score and of the reference score,
+  for each scatter level. <b>Shows:</b> the gap between fit and reference widens as scatter grows (at level 0.6:
+  {{f:fx.ho.06}} against {{f:fx.or.06}}; at 1.5: {{f:fx.ho.15}} against {{f:fx.or.15}}); a high score alone therefore
+  does not show that the fitted map is right.</figcaption>
+</figure>
+<p>The score also cannot tell a deformation from a shared shift. With the targets shuffled between images there is no
+map at all, yet the fit scores {{f:fx.shuf.ho}}, while predicting every offset by one constant vector scores
+{{f:fx.shuf.const}}. On the clean smooth map the no-deformation baseline scores {{f:fx.clean.id}} (worse than predicting zero offset), because the map does deform. The released scores
+are therefore always printed next to both baselines, and the gates require the fit to beat the constant offset by
+0.5.</p>
+<div class="xscroll"><table class="xtab" id="tab-base"></table></div>
+
+<h2 id="failed">What cannot be recovered, and why</h2>
+<p>Small stretches are hardest to estimate along weakly sampled directions, where the local spectrum above is lowest:
+there, scatter in the endpoints is hard to tell apart from stretch.</p>
+<figure class="xfig" id="fig-fail">
+  <div class="xfig-title">The smallest log-stretch and log J · fixture contrasts with and without scatter (level 0.6) · seed 0</div>
+  <div class="xscroll"><table class="xtab" id="tab-fail"></table></div>
+  <figcaption><b>Read:</b> reference and estimated median smallest log-stretch, the share of points flagged as rank-deficient,
+  and the median signed error of $\log J$ for the forced and free-intercept fits. For the rank-8 map the true smallest
+  log-stretch is minus infinity; the reference {{f:fx.rank8.true}} is what the finite-difference Jacobian gives for the
+  exactly collapsed direction. <b>Shows:</b> the rank-8 map is flagged as rank-deficient on {{f:fx.rank8.loss.clean}}
+  of points without scatter but on {{f:fx.rank8.loss}} with it, and its smallest log-stretch then reads as
+  {{f:fx.rank8.est}}; a near-singular map (reference {{f:fx.near.true}}) reads as {{f:fx.near.est}}; scatter along the weakest direction moves $\log J$ by
+  {{f:fx.along.logJ}} (forced fit) and {{f:fx.along.iclogJ}} (free intercept). These quantities are not released in any
+  form.</figcaption>
+</figure>
+
+<h2 id="released">The released strain-type fields</h2>
+<p>A released value counts as false when it differs from the truth by more than the tolerance: 0.1 for the largest
+log gain, 0.2 of the median expansion scale for the expansion rate, and 20% of the cloud median for the strain rate and
+spin. Coverage is the share of points passing the release rule recorded for each fixture run.</p>
+<figure class="xfig wide" id="fig-fr">
+  <div class="xfig-title">Coverage and false releases of the strain-type fields · fixture variants · seeds 0 and 1</div>
+  <div class="xctl"><label>Field <select aria-label="Field"></select></label></div>
+  <div class="xscroll" data-host></div>
+  <figcaption><b>Read:</b> for each fixture variant, the share of points released and, among them, the share outside
+  tolerance, for seed 0 and seed 1. <b>Shows:</b> on the smooth deforming map with scatter up to level 1.0, at most
+  {{f:fx.fr.scatter.max}} of released values are false for any of the four fields, while coverage falls as scatter grows
+  (largest gain: {{f:fx.gain.clean.s0}} without scatter to {{f:fx.gain.10.s0}} at level 1.0 on seed 0;
+  {{f:fx.gain.clean.s1}} to {{f:fx.gain.10.s1}} on seed 1). At level 1.5 the gates withhold most points (at most
+  {{f:fx.cov.15.max}} released, up to {{f:fx.fr.15.max}} false). On the strongly curved map {{f:fx.fr.curved.min}} to
+  {{f:fx.fr.curved.max}} of released values are false, the gap between a slope over the neighbourhood radius and a
+  derivative at a point. The scattered identity control is discussed below.</figcaption>
+</figure>
+<p>One gate exists because of a control. On the identity map with scatter, a cloud that does not deform, scatter
+inflates the largest gain: with only the free-intercept gates it is released on {{f:fx.idn.pre.cov.s0}} of points
+(seed 1: {{f:fx.idn.pre.cov.s1}}) and {{f:fx.idn.pre.fr.s0}} of those values are outside tolerance (seed 1:
+{{f:fx.idn.pre.fr.s1}}). Requiring the fit to beat the no-deformation score by {{f:gate.identity_gain_min}} cuts the release to
+{{f:fx.idn.cov.s0}} of points on seed 0 and {{f:fx.idn.cov.s1}} on seed 1; the few values still released there remain mostly outside tolerance ({{f:fx.idn.fr.s0}} and {{f:fx.idn.fr.s1}}). The table above uses the final gates.</p>
+
+<h2 id="gates">Gates and tolerances frozen before the run</h2>
+<div class="xscroll"><table class="xtab dec">
+<thead><tr><th>Quantity</th><th>Released where</th><th>Tolerance on the fixture</th></tr></thead>
+<tbody>
+<tr><td>Travel, kinetic energy, neighbour log change, vertex distance</td><td>Every image (no neighbourhood fit)</td><td>Exact</td></tr>
+<tr><td>Global rigid fit (one rotation field for the whole cloud)</td><td>One number per step</td><td>Exact</td></tr>
+<tr><td>Relative motion; the no-deformation and constant-offset scores</td><td>Every image with a neighbourhood (no fit)</td><td>Measured directly</td></tr>
+<tr><td>Shift / slope / residual split; held-out score of the linear fit</td><td>Images whose nine directions are resolved</td><td>None: released as measured. The fixture compares the slope fraction and the held-out score with known-map values (0.05) to characterise them, not to gate them</td></tr>
+<tr><td>Largest log gain</td><td rowspan="2">Held-out score ≥ {{f:gate.heldout_min}} and at least {{f:gate.slope_gain_min}} above the constant offset; centred-design condition number ≤ {{f:gate.cond_centred_max}}; effective neighbours ≥ {{f:gate.n_eff_per_dim_strain}}(m + 1). The largest gain is gated on the prediction of next-site offsets and must also beat the no-deformation score by {{f:gate.identity_gain_min}}, unless that score is itself at least {{f:gate.identity_exact_min}} (the exception matters for the rotation control; no release in the real run used it). The three rate fields are gated on the held-out prediction of displacement differences.</td><td>0.1 (a fixture tolerance)</td></tr>
+<tr><td>Expansion rate; strain rate; spin</td><td>0.2 of the median expansion scale; 20% of the cloud median</td></tr>
+<tr><td>Smallest log-stretches, Hencky strain, $\log J$, volumetric / shear split, anchored-fit quantities</td><td>Never</td><td>Not recoverable (above)</td></tr>
+</tbody></table></div>
+
+<h2 id="review">Review of the measurement code</h2>
+<p>After the first run, the measurement code was reviewed independently. The review found five mismatches in release
+masks and labels, which were fixed, and every export was regenerated. The files behind this site, the explorer and
+the other pages are the regenerated ones.</p>
+
+<h2 id="lens">Checks on the lens</h2>
+<p>Three exact checks run at every checkpoint: the lens at the last site equals ordinary inference; every lens equals
+an explicit forward pass with the later residual branches set to zero; and the increment identity
+$z_{l+1} - z_l = A_{l+1}[\mathrm{relu}(Q h_l + F(h_l)) - Q h_l]$ holds across both stage changes. All checks pass at
+{{f:lens.passed}} {{f:lens.n}} checkpoints; the largest absolute error anywhere is {{f:lens.worst}}.</p>
+<figure class="xfig" id="fig-acc">
+  <div class="xfig-title">Lens top-1 accuracy per site over training · seed 0 · all 73 checkpoints</div>
+  <div class="xfig-plot" data-h="250"></div>
+  <figcaption><b>Read:</b> one line per site, shading from the stem to b9 (the heavy line); training step on a log axis. <b>Shows:</b> at
+  the final checkpoint the lens is at chance at the stem and b1 ({{f:acc.stem}} and {{f:acc.b1}}), {{f:acc.mid.min}} to
+  {{f:acc.mid.max}} from b2 to b6, {{f:acc.b7}} at b7, {{f:acc.b8}} at b8 and {{f:acc.b9}} at b9, equal to the network's own
+  test accuracy ({{f:acc.model}}). The lens's accuracy at a site does not change the ambient Fisher metric, which is the
+  same at every site.</figcaption>
+</figure>
+
+<script type="module">
+import { chart, register, shareTable, depthColor, C, fmt, pct } from "../js/xcharts.js";
+const D = JSON.parse(document.getElementById("data").textContent);
+const fig = id => document.getElementById(id), plot = id => fig(id).querySelector(".xfig-plot");
+
+register(() => chart(plot("fig-fx"), { height: 250, x: { type: "band", labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9"], label: "eigenvalue rank" }, y: { domain: [0.01, 1.2], log: true, label: "relative eigenvalue" },
+  series: [{ name: "lens cloud, b7", values: D.real_b7.spectrum, color: C.a, kind: "line", width: 2.4, tfmt: v => fmt(v, 3) },
+    { name: "fixture source cloud", values: D.fixture.spectrum, color: C.b, kind: "line", dash: "5 3", tfmt: v => fmt(v, 3) }] }));
+
+register(() => { const e = D.eve;
+  chart(plot("fig-anchor"), { height: 230, x: { type: "band", labels: ["endpoint scatter, seed 0", "endpoint scatter, seed 1", "edge scatter, seed 0", "edge scatter, seed 1"] }, y: { domain: [0, 0.08], label: "relative error", fmt: v => pct(v, 0) },
+    series: [{ name: "fit forced through the image", values: [e[0].anch_endpoint, e[1].anch_endpoint, e[0].anch_edge, e[1].anch_edge], color: C.b, kind: "bar", tfmt: v => pct(v, 1) },
+      { name: "free intercept", values: [e[0].ic_endpoint, e[1].ic_endpoint, e[0].ic_edge, e[1].ic_edge], color: C.a, kind: "bar", tfmt: v => pct(v, 1) }] }); });
+
+register(() => { const o = D.opt, lab = o.map(r => r.name.replace("endpoint", "scatter ").replace("clean", "none"));
+  chart(plot("fig-opt"), { height: 240, x: { type: "band", labels: lab, label: "scatter level" }, y: { domain: [0.4, 1], label: "held-out score" },
+    series: [{ name: "fit, seed 0", values: o.map(r => r.heldout), color: C.a, kind: "line", width: 2.2 }, { name: "reference, seed 0", values: o.map(r => r.oracle), color: C.a, kind: "line", dash: "5 3" },
+      { name: "fit, seed 1", values: o.map(r => r.heldout_s1), color: C.b, kind: "line", width: 2.2 }, { name: "reference, seed 1", values: o.map(r => r.oracle_s1), color: C.b, kind: "line", dash: "5 3" }] }); });
+
+(() => { const B = D.baselines, rows = [["smooth:clean", "smooth map, no scatter"], ["smooth:endpoint0.6", "smooth map, scatter 0.6"], ["smooth:endpoint1.5", "smooth map, scatter 1.5"], ["smooth:shuffled", "targets shuffled (no map)"]];
+  fig("tab-base").innerHTML = `<thead><tr><th>fixture variant (seed 0, median over points)</th><th>linear fit</th><th>constant offset</th><th>no deformation</th></tr></thead><tbody>${rows.filter(([k]) => B[k]).map(([k, l]) => `<tr><td>${l}</td><td>${fmt(B[k].heldout_ic, 2)}</td><td>${fmt(B[k].heldout_const, 2)}</td><td>${fmt(B[k].heldout_identity, 2)}</td></tr>`).join("")}</tbody>`; })();
+
+(() => { const K = D.contrasts, lab = { "rank8:clean": "rank-8 map, no scatter", "rank8:endpoint0.6": "rank-8 map, scatter", "nearsing:clean": "near-singular map, no scatter", "nearsing:endpoint0.6": "near-singular map, scatter",
+    "weakcomp:endpoint0.6": "compression on the weakest direction, scatter", "weakcomp:along0.6": "… scatter along that direction", "weakcomp:orth0.6": "… scatter orthogonal to it" };
+  fig("tab-fail").innerHTML = `<thead><tr><th>variant</th><th>reference smallest log-stretch</th><th>estimated</th><th>flagged rank-deficient</th><th>log J error, forced fit</th><th>log J error, free intercept</th></tr></thead><tbody>${Object.entries(K).map(([k, r]) => `<tr><td>${lab[k] || k}</td><td>${fmt(r.true_ls9_median, 1)}</td><td>${r.est_ls9_median == null ? "not finite" : fmt(r.est_ls9_median, 1)}</td><td>${pct(r.rank_loss_frac, 0)}</td><td>${r.logJ_bias == null ? "–" : fmt(r.logJ_bias, 2)}</td><td>${r.ic_logJ_bias == null ? "–" : fmt(r.ic_logJ_bias, 2)}</td></tr>`).join("")}</tbody>`; })();
+
+(() => { const f = fig("fig-fr"), sel = f.querySelector("select"), host = f.querySelector("[data-host]");
+  const names = { ic_log_gain_max: "largest log gain", ic_E_trace: "expansion rate", ic_strain_sq: "strain rate", ic_spin_sq: "spin" };
+  const VL = { "smooth:clean": "smooth map, no scatter", "smooth:endpoint0.3": "smooth map, scatter 0.3", "smooth:endpoint0.6": "smooth map, scatter 0.6", "smooth:endpoint1.0": "smooth map, scatter 1.0",
+    "smooth:endpoint1.5": "smooth map, scatter 1.5", "weakstretch:clean": "stretch on the weakest direction, no scatter", "weakstretch:endpoint0.6": "stretch on the weakest direction, scatter 0.6",
+    "weakcomp:clean": "compression on the weakest direction, no scatter", "weakcomp:endpoint0.6": "compression on the weakest direction, scatter 0.6",
+    "rank8:clean": "rank-8 map, no scatter", "nearsing:clean": "near-singular map, no scatter", "vertex:endpoint3": "collapse towards vertices, scatter 3", "weakcomp:along0.6": "… scatter 0.6 along that direction", "weakcomp:orth0.6": "… scatter 0.6 orthogonal to it",
+    "rank8:endpoint0.6": "rank-8 map, scatter 0.6", "nearsing:endpoint0.6": "near-singular map, scatter 0.6", "vertex:clean": "collapse towards vertices, no scatter", "vertex:endpoint10": "collapse towards vertices, scatter 10",
+    "fold:fold_random": "fold along a random direction", "fold:fold_major": "fold along the major direction", "curved:clean": "strongly curved map", "controls:identity": "identity", "controls:rotation": "rotation of the sphere",
+    "controls:identity_noise0.6": "identity with scatter 0.6 (no deformation)", "smooth:shuffled": "targets shuffled (no map)" };
+  sel.innerHTML = Object.entries(names).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
+  const draw = () => { const T = D.ftab[sel.value];
+    host.innerHTML = `<table class="xtab"><thead><tr><th>fixture variant</th><th>released, seed 0</th><th>false, seed 0</th><th>released, seed 1</th><th>false, seed 1</th></tr></thead><tbody>${D.variants.map((v, i) => {
+      const a = T.s0[i], b = T.s1[i], fr = r => r.false_release == null ? "–" : pct(r.false_release, 0), cv = c => pct(c, c > 0 && c < 0.01 ? 1 : 0);
+      return `<tr><td>${VL[v] || v}</td><td>${cv(a.coverage)}</td><td>${fr(a)}</td><td>${cv(b.coverage)}</td><td>${fr(b)}</td></tr>`; }).join("")}</tbody></table>`; };
+  sel.addEventListener("change", draw); draw(); })();
+
+register(() => { const L = D.lens;
+  chart(plot("fig-acc"), { height: 250, x: { type: "logstep", domain: [0, 64000], label: "training step" }, y: { domain: [0, 1], label: "top-1 accuracy", fmt: v => pct(v, 0) }, legend: false,
+    series: L.sites.map((s, i) => ({ name: s, points: L.steps.map((st, j) => [st, L.acc[j][i]]), color: depthColor(Math.round(i * 8 / 9)), kind: "line", width: i === 9 ? 2.4 : 1.3, tfmt: v => pct(v, 1) })) }); });
+</script>

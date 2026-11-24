@@ -1,0 +1,22 @@
+{
+ "stage": "pilot",
+ "app": "mm-manifoldmotion-fields",
+ "call_id": "fc-01M86XACE89ZX5SPFQCBCFBN8V",
+ "launched_at": 1795528405.0979738,
+ "launched_utc": "2026-11-24T13:53:25Z",
+ "reserved_usd": 0.44662102,
+ "result": {
+  "stage": "pilot",
+  "units": [
+   "ckpt:64000"
+  ],
+  "failures": {},
+  "worker_seconds": 1714.267419576645,
+  "wall_seconds": 1718.8334665298462,
+  "unit_seconds": {
+   "ckpt:64000": 1714.267419576645
+  },
+  "estimated_usd": 0.12781008690823076,
+  "spend_with_startup_reserve_usd": 0.13242310690823075
+ }
+}

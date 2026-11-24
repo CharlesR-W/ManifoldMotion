@@ -1,0 +1,31 @@
+[project]
+name = "manifoldmotion"
+version = "0.1.0"
+description = "Kinematics of a moving point cloud in Fisher-Rao space (carre du champ calculus)."
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "scikit-learn>=1.3",
+]
+
+[dependency-groups]
+dev = [
+    "geomstats>=2.8.0",
+    "pytest>=8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["mm"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# default run skips the slow sweeps; run them with `uv run pytest -m slow` (the last -m wins)
+addopts = "-m 'not slow'"
+markers = [
+    "slow: bandwidth / sample-size convergence sweeps (run with -m slow, skip with -m 'not slow')",
+]

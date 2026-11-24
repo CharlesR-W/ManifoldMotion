@@ -1,0 +1,132 @@
+{
+  "schema": 2,
+  "seed": 1,
+  "step": 43520,
+  "passed": true,
+  "atol": 1e-08,
+  "rtol": 1e-08,
+  "error_definition": "max_abs: max component error; max_relative: max over images of component infinity error divided by max(1, reference logit/step infinity norm)",
+  "explicit_rows": "first 10000 CIFAR-10 test images (0 through 9999)",
+  "a": {
+    "n": 10000,
+    "max_abs": 0.0,
+    "max_relative": 0.0
+  },
+  "b": {
+    "stem": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "b1": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "b2": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "b3": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "b4": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "b5": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "b6": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "b7": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "b8": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "b9": {
+      "n": 10000,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    }
+  },
+  "c": {
+    "stem->b1": {
+      "n": 10000,
+      "max_abs": 2.4424906541753444e-15,
+      "max_relative": 2.4424906541753444e-15
+    },
+    "b1->b2": {
+      "n": 10000,
+      "max_abs": 2.3314683517128287e-15,
+      "max_relative": 2.3314683517128287e-15
+    },
+    "b2->b3": {
+      "n": 10000,
+      "max_abs": 2.220446049250313e-15,
+      "max_relative": 2.0261570199409107e-15
+    },
+    "b3->b4": {
+      "n": 10000,
+      "max_abs": 3.2751579226442118e-15,
+      "max_relative": 3.2751579226442118e-15
+    },
+    "b4->b5": {
+      "n": 10000,
+      "max_abs": 3.635980405647388e-15,
+      "max_relative": 2.854069796481859e-15
+    },
+    "b5->b6": {
+      "n": 10000,
+      "max_abs": 3.4208746946262636e-15,
+      "max_relative": 3.4208746946262636e-15
+    },
+    "b6->b7": {
+      "n": 10000,
+      "max_abs": 5.329070518200751e-15,
+      "max_relative": 3.602091675459184e-15
+    },
+    "b7->b8": {
+      "n": 10000,
+      "max_abs": 6.439293542825908e-15,
+      "max_relative": 5.3925094314096935e-15
+    },
+    "b8->b9": {
+      "n": 10000,
+      "max_abs": 3.552713678800501e-14,
+      "max_relative": 1.563025564874489e-15
+    }
+  },
+  "lens_top1_accuracy": [
+    0.1115,
+    0.1388,
+    0.1335,
+    0.1706,
+    0.2041,
+    0.1824,
+    0.1978,
+    0.4356,
+    0.6014,
+    0.912
+  ],
+  "model_top1_accuracy": 0.912,
+  "archived_model_top1_accuracy": 0.912,
+  "gpu": "Tesla T4",
+  "setup_s": 0.7873534749999749,
+  "inference_s": 27.928693914999997,
+  "seconds_before_commit": 28.729000164000013
+}

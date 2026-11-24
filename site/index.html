@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ManifoldMotion</title>
+<meta name="description" content="The CIFAR-10 test set as a point cloud moving through Fisher space, read out by a logit lens at every block of a ResNet-20 and over training.">
+<meta name="color-scheme" content="light dark">
+<link rel="preload" href="vendor/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="vendor/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<link rel="stylesheet" href="css/site.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 14 A12 12 0 0 1 14 2' fill='none' stroke='%232a78d6' stroke-width='2'/%3E%3Ccircle cx='5' cy='8.5' r='2' fill='%23eb6834'/%3E%3Ccircle cx='9.5' cy='5' r='2' fill='%2316a39a'/%3E%3C/svg%3E">
+<script type="importmap">{ "imports": { "three": "./vendor/three/three.module.min.js" } }</script>
+</head>
+<body data-tab="overview">
+<a class="skip" href="#main">Skip to content</a>
+<div class="banner" role="note">
+  <span class="banner-tag">Research notebook</span>
+  <span>One network (ResNet-20 on CIFAR-10, seed {{SEED}}), measured at {{N_STEPS}} checkpoints; a second seed at the final checkpoint.</span>
+</div>
+<nav class="tabs" aria-label="Sections">
+  <div class="tabs-inner">
+    <a class="tabs-home" href="#overview">ManifoldMotion</a>
+    <div class="tablist" role="tablist">
+      <a role="tab" href="#overview" data-tab="overview">Overview</a>
+      <a role="tab" href="#explorer" data-tab="explorer" class="tab-ex">Explorer</a>
+      <a role="tab" href="#experiments" data-tab="experiments">Experiments</a>
+    </div>
+  </div>
+</nav>
+<main id="main">
+
+<section class="tab-panel" id="tab-overview" data-tab="overview">
+  <header class="masthead">
+    <h1 class="title">ManifoldMotion</h1>
+    <p class="subtitle">The CIFAR-10 test set as a cloud of points moving through Fisher space, block by block and over training</p>
+    <p class="cta"><a class="explore-link big" href="#explorer">Open the explorer</a></p>
+  </header>
+  <article class="prose">
+<h2 id="question">The question</h2>
+<p>A residual network changes its representation of an image a little at each block. If each intermediate
+representation is read as a distribution over the ten classes, every image becomes a point in one fixed space, the
+same at every depth and every training step. The 10,000 CIFAR-10 test images then form a cloud that moves through
+that space as depth increases and as training proceeds. The project set out to measure that motion as the kinematics of a
+deforming body: how fast each point moves, whether it slides along the cloud or carries the cloud with it, how
+differently neighbouring points move, and how the cloud stretches, shears and tilts. The first finding is that the
+cloud, at the resolution the test set gives, has no stable thin directions, so the second and last of these are not defined.</p>
+
+<h2 id="lens">The lens and Fisher space</h2>
+<p>The network is a ResNet-20 trained on CIFAR-10 (seed {{SEED}}; {{N_ALL_STEPS}} checkpoints over {{LAST_STEP}} training steps, of which the
+explorer includes {{N_STEPS}}). Its residual stream is read at ten sites $l = 0, \dots, 9$: the stem output and the
+outputs of blocks b1 to b9. At each site a logit lens maps the activation $h_l$ to logits</p>
+$$ z_l = A_l h_l + b, $$
+<p>where $A_l$ continues along the skip path only (the shortcut's subsampling and zero channels at stage changes,
+then the network's own global average pool and final linear layer). So $z_l$ is what the network would output if
+every later residual branch were zero; at the last site it is the ordinary output.</p>
+<p>The class distribution $p_l = \operatorname{softmax}(z_l)$ is mapped to $X_l = 2\sqrt{p_l}$ (square root taken
+per class), a point on the positive part of the sphere of radius 2 in $\mathbb{R}^{10}$. The metric this sphere
+inherits from $\mathbb{R}^{10}$ is the Fisher–Rao metric on distributions, so the distance between two images along
+the sphere is their Fisher–Rao distance:</p>
+$$ \begin{aligned} d(X, X') &= 4 \arctan \frac{\lVert X - X' \rVert}{\lVert X + X' \rVert} \\ &= 2 \arccos \sum_c \sqrt{p_c \, p'_c}. \end{aligned} $$
+<p>Two confident predictions of different classes are $\pi$ apart. The space is the same at every site and
+checkpoint, so every change of distance within the cloud is a deformation of the cloud, not of the space.</p>
+
+<figure class="fig schematic">
+<svg viewBox="0 0 660 240" role="img" aria-label="Left: a probability triangle for three classes. Right: the same distributions mapped by X = 2 sqrt(p) onto an eighth of a sphere, with one image's positions at four sites joined by displacement arrows.">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/></marker>
+  <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--mute)"/></marker></defs>
+  <g class="sk">
+    <path d="M40 190 L200 190 L120 51 Z" class="sk-face"/>
+    <text x="30" y="210">class 1</text><text x="180" y="210">class 2</text><text x="98" y="40">class 3</text>
+    <circle cx="120" cy="144" r="3" class="sk-v"/><text x="128" y="148" class="sk-small">uniform</text>
+    <text x="120" y="228" text-anchor="middle" class="sk-cap">distributions p</text>
+  </g>
+  <path d="M250 120 L330 120" stroke="var(--mute)" stroke-width="1.5" marker-end="url(#ah2)"/>
+  <text x="290" y="108" text-anchor="middle" class="sk-math">X = 2√p</text>
+  <g class="sk">
+    <path d="M380 192 Q 408 92 500 28 Q 592 92 620 192 Q 500 218 380 192 Z" class="sk-face"/>
+    <circle cx="380" cy="192" r="3.5" class="sk-v"/><circle cx="500" cy="28" r="3.5" class="sk-v"/><circle cx="620" cy="192" r="3.5" class="sk-v"/>
+    <text x="372" y="212" text-anchor="middle">class 1</text><text x="628" y="212" text-anchor="middle">class 2</text><text x="500" y="17" text-anchor="middle">class 3</text>
+    <circle cx="500" cy="140" r="3" class="sk-v"/><text x="508" y="150" class="sk-small">uniform</text>
+    <circle cx="538" cy="88" r="4" class="sk-dot"/>
+    <circle cx="520" cy="112" r="4" class="sk-dot"/>
+    <circle cx="486" cy="132" r="4" class="sk-dot"/>
+    <circle cx="440" cy="160" r="4" class="sk-dot"/>
+    <path d="M538 88 Q 532 101 523 108" class="sk-step" marker-end="url(#ah)"/>
+    <path d="M520 112 Q 505 124 490 130" class="sk-step" marker-end="url(#ah)"/>
+    <path d="M486 132 Q 462 142 444 157" class="sk-step" marker-end="url(#ah)"/>
+    <text x="546" y="86" class="sk-small">site 0</text><text x="404" y="150" class="sk-small">site 3</text>
+    <text x="500" y="230" text-anchor="middle" class="sk-cap">points X on a sphere of radius 2 (an eighth of it)</text>
+  </g>
+</svg>
+<figcaption>Three classes shown. The map $X = 2\sqrt{p}$ sends the probability triangle onto an eighth of the sphere
+of radius 2; distance along the sphere is Fisher–Rao distance. One image's lens points at successive sites are
+joined by its displacements $v_l$.</figcaption>
+</figure>
+
+<h2 id="findings">Findings</h2>
+<p>All at the final checkpoint (step {{LAST_STEP}}) unless stated, on all 10,000 test images unless a share is given.</p>
+<ol class="findings">
+<li><b>At the resolution 10,000 images give, the lens cloud has no stable thin tangent space.</b> At every site from
+the stem to b8, the local second moment of the cloud (the uncentred weighted second moment of each image's offsets to
+its neighbours) decays smoothly over all nine directions of the sphere with no gap (at b7, relative to the largest:
+{{f:b7.spectrum}}). The measurement the project set out to make, the split of each image's motion into a part along
+the data manifold and a part normal to it, and the strain energy of that manifold, is therefore not available for this
+cloud: the rules that would release it pass on at most {{f:strict.tangent.max}} of images. This does not prove that no
+lower-dimensional structure exists; it says none is resolved at this sample size.
+<a href="experiments/depth.html#blob">Depth experiment</a>.</li>
+<li><b>Early blocks mostly turn the cloud; the last block mostly reshapes it.</b> For the cloud as a whole, a single
+rotation field of the sphere carries {{f:rigid.1}} and {{f:rigid.2}} of the kinetic energy at b1→b2 and b2→b3, but
+{{f:rigid.8}} at b8→b9. That last block also moves images furthest (kinetic energy {{f:ke.8}} distance² per block²,
+against {{f:ke.7}} at b7→b8).
+<a href="#explorer?step=64000&amp;site=8&amp;proj=pca&amp;color=f:nonrigid_speed&amp;arrows=1">Explorer: non-rigid speed at b8</a>.</li>
+<li><b>Neighbourhoods spread at every block and contract at the last.</b> The mean log change of distances to the 16
+nearest neighbours is {{f:nn.min_early}} to {{f:nn.max_early}} per block from the stem to b8, then {{f:nn.8}} at
+b8→b9, a geometric-mean distance ratio of 1/{{f:nn.factor}}, as the cloud concentrates near the class vertices:
+{{f:vertex.last}} of images end within Fisher–Rao distance 0.05 of one.
+<a href="#explorer?step=64000&amp;site=8&amp;color=f:nn_log_ratio">Explorer: neighbour log change at b8</a>.</li>
+<li><b>Most relative motion of neighbours is not reproduced by a local linear map.</b> On the images whose nine
+directions are resolved ({{f:fit9.min}} to {{f:fit9.max}}), the part of the neighbours' relative motion that a linear
+map of the neighbourhood explains, in sample and at the neighbourhood radius, is the minority (median per image
+{{f:slopemed.min}} to {{f:slopemed.max}} across depth steps); the rest is a shift shared by the neighbours and a
+residual. <a href="experiments/depth.html#relative">Depth experiment</a>.</li>
+<li><b>Strain-type quantities are released in a few places, and volume change nowhere.</b> Four statistics of the
+fitted slope (largest log gain, expansion rate, strain rate, spin) pass their calibrated gates on few images: the
+largest gain on at most {{f:cov.gain.max}} at any step, the other three on at most {{f:cov.E.max_early}} before b8→b9
+and on {{f:cov.E.last}} at b8→b9 (mean expansion rate there {{f:E.last}} per block). A fixture matched to the real
+cloud showed that the smallest stretches and the volume change $\log J$ cannot be recovered at all.
+<a href="experiments/calibration.html">Calibration</a>.</li>
+<li><b>The b8→b9 step's statistics change most over training.</b> Its rigid fraction falls from
+{{f:tr.rigid.first}} at initialisation to {{f:tr.rigid.last}}, and the share of images it brings near a vertex rises
+from at most {{f:tr.vertex.pre1024}} before step 1,024 to {{f:tr.vertex.last}}. On the training clock, every site
+reaches its highest kinetic energy (distance² per step²) within the first {{f:tc.peak.latest}} steps, and from the
+first interval to the last it falls by a factor of {{f:tc.ratio.min}} to {{f:tc.ratio.max}}.
+<a href="experiments/training.html">Training experiment</a>.</li>
+</ol>
+<p>A second seed shows the same last block (kinetic energy {{f:seed1.ke.last}}, rigid fraction {{f:seed1.rigid.last}},
+neighbour log change {{f:seed1.nn.last}}); halving or doubling the neighbourhood size moves the median slope and shift
+fractions by at most {{f:scale.frac.change}}.</p>
+
+<h2 id="measured">What was measured instead</h2>
+<p>The images are the material points, and $X_l(x)$ is image $x$'s position at site $l$. The displacement from site
+$l$ to $l+1$ is the tangent vector $v_l(x) = \log_{X_l(x)} X_{l+1}(x)$ of the sphere; its length is the Fisher–Rao
+distance travelled. There are two clocks: depth (ten positions at one checkpoint) and training (one site across
+checkpoints, rates per training step). Kinetic energy is $|v/\Delta t|^2/2$, a squared distance per squared unit of
+time. Because no thin directions are resolved, local quantities use the <b>flow reading</b>: the cloud is treated as
+full-dimensional, and every regression quantity is the gain of a graph-weighted linear predictor of neighbour offsets
+at the neighbourhood radius (k = 256 nearest neighbours), not a pointwise derivative.</p>
+<ul>
+<li><b>On every image, with no fit:</b> speed and kinetic energy; the mean log change of neighbour distances; the
+distance to the nearest class vertex; relative motion of neighbours and the "no deformation" and "constant offset"
+prediction scores (these need only a neighbourhood: {{f:relm.mass.min}} or more of images).</li>
+<li><b>For the cloud as a whole:</b> the share of kinetic energy carried by one global rotation field of the
+sphere.</li>
+<li><b>Where all nine directions are resolved ({{f:fit9.min}} to {{f:fit9.max}} of images at the final checkpoint,
+at least {{f:fit9.min.all}} at any measured checkpoint):</b> the exact split of relative motion into a shift shared by
+the neighbours, a slope explained by a linear map (in sample) and a residual; the held-out score of the linear fit,
+always read against the two baselines.</li>
+<li><b>Where calibrated gates pass (few images):</b> the largest log gain, the expansion rate, the strain rate and the
+spin of the fitted map.</li>
+<li><b>Not released:</b> the tangential / normal split, strain of a submanifold, the smallest stretches, Hencky
+strain and $\log J$.</li>
+</ul>
+<p>Neighbourhoods are built with the carré du champ (Bakry–Émery) calculus on a weighted graph in which each image
+carries mass $1/N$. Every average states the share of images it is defined on.</p>
+
+<h2 id="change">What would change this</h2>
+<p>More test images would help little: in nine dimensions the neighbourhood radius at a fixed number of neighbours
+shrinks only like $N^{-1/9}$, so halving it needs about 500 times more points. A readout with fewer dimensions, or an
+analysis restricted to one class or to the images near a vertex, might find thin directions that the pooled cloud does
+not have. The 50,000 training images were deliberately left for a later comparison.</p>
+
+<h2 id="look">Where to look</h2>
+<p>The <a href="#explorer">Explorer</a> shows the cloud at every site and included checkpoint, coloured by any of the
+released per-image fields. The <a href="#experiments">Experiments</a> tab has the three experiment pages with every
+figure and the decisions behind them.</p>
+  </article>
+</section>
+
+<section class="tab-panel" id="tab-explorer" data-tab="explorer" hidden>
+  <div class="ex" id="ex"><div class="ex-loading">Loading the explorer…</div></div>
+</section>
+
+<section class="tab-panel" id="tab-experiments" data-tab="experiments" hidden>
+  <header class="page-head"><h1>Experiments</h1></header>
+  <article class="prose">
+    <p class="lede">Each experiment asks one question of the moving cloud and has its own page.</p>
+    <div id="x-list" class="x-list"><p class="mute">Loading…</p></div>
+  </article>
+</section>
+</main>
+<footer class="foot">
+  <div>Built {{BUILT}}. Static site; no tracking, no external requests.</div>
+  <div>Type: Source Serif 4, Inter, JetBrains Mono (SIL OFL). Maths: KaTeX (MIT). 3D: three.js (MIT).</div>
+</footer>
+<div id="tooltip" class="tooltip" hidden></div>
+<script defer src="vendor/katex/katex.min.js"></script>
+<script defer src="vendor/katex/auto-render.min.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

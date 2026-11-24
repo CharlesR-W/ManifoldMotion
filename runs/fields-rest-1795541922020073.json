@@ -1,0 +1,28 @@
+{
+ "stage": "rest",
+ "app": "mm-manifoldmotion-fields",
+ "call_id": "fc-01M87A6WJ46DDS5BS3K4V6BEGS",
+ "launched_at": 1795541922.0200734,
+ "launched_utc": "2026-11-24T17:38:42Z",
+ "reserved_usd": 0.8385347799999998,
+ "result": {
+  "stage": "rest",
+  "units": [
+   "ckpt:9",
+   "ckpt:5120",
+   "ckpt:11520",
+   "ckpt:21760"
+  ],
+  "failures": {},
+  "worker_seconds": 5880.800167560577,
+  "wall_seconds": 1819.8024978637695,
+  "unit_seconds": {
+   "ckpt:9": 951.2872231006622,
+   "ckpt:5120": 1813.9706423282623,
+   "ckpt:11520": 1701.7024886608124,
+   "ckpt:21760": 1413.8398134708405
+  },
+  "estimated_usd": 0.42057677370918267,
+  "spend_with_startup_reserve_usd": 0.4382395537091827
+ }
+}

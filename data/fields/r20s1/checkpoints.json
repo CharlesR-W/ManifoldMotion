@@ -1,0 +1,46 @@
+{
+ "run": "r20s1",
+ "fields_meta": "fields_meta.json",
+ "shape": [
+  9,
+  10000
+ ],
+ "dtype": "float32",
+ "speed_only_dir": null,
+ "notes": [
+  "Strict-mode tilt totals (strict:tilt_max, strict:cr_tilt_max) are not exported in this release (null, mass fraction 0 in every totals file, training-clock and extra files included): the grid was computed while the endpoint-plane tilt rule meant for thick mode was applied in strict mode too, dropping strict mode's held-out prediction gate; the library now keeps that gate in strict mode (mm/step.py, rule 'tilt_angles'). Strict tilt coverage under the correct rule is near zero (e.g. 14 images at checkpoint 15, b5->b6). Thick-mode tilt (thick:tilt_max, per-point field 'tilt') is unaffected.",
+  "JSON files contain no NaN/Infinity literals: undefined values are null, with mass_fraction 0 for totals."
+ ],
+ "checkpoints": [
+  {
+   "step": 64000,
+   "depth": "depth_64000.npz",
+   "totals": "totals_64000.json",
+   "fields": [
+    "E_trace",
+    "heldout",
+    "heldout_const",
+    "heldout_identity",
+    "leading_fraction",
+    "local_dim",
+    "log_gain_max",
+    "nn_log_ratio",
+    "nonrigid_speed",
+    "one_sided",
+    "path_length",
+    "radius",
+    "relmotion",
+    "residual_fraction",
+    "shift_fraction",
+    "slope_fraction",
+    "speed",
+    "spin",
+    "strain_rate",
+    "tilt",
+    "toward_label",
+    "vertex_distance"
+   ],
+   "n_totals": 290
+  }
+ ]
+}

@@ -1,0 +1,197 @@
+name	printed	value	source	used in
+b7.spectrum	1, .80, .67, .50, .33, .22, .14, .08, .05	[1.0, 0.8043323618870772, 0.6651652139834996, 0.49801557157934195, 0.3282990557747587, 0.21771527383696043, 0.13790834511873368, 0.07776845641082228, 0.046515299974351915]	data/fields/r20s0/extra/summary_results.json › diag_final[7].spectrum_median	experiments/depth.html, index.html
+b7.smallest	0.05	0.046515299974351915	data/fields/r20s0/extra/summary_results.json › diag_final[7].spectrum_median[8]	
+onesided.min	0.82	0.8193657998741155	data/fields/r20s0/extra/summary_results.json › diag_final[*].one_sided_strict_median (min over stem..b8)	experiments/calibration.html, experiments/depth.html
+onesided.max	0.86	0.8612220070323762	data/fields/r20s0/extra/summary_results.json › diag_final[*].one_sided_strict_median (max over stem..b8)	experiments/calibration.html, experiments/depth.html
+radius.stem	0.047	0.04669531547421926	data/fields/r20s0/extra/summary_results.json › diag_final[0].radius_q[1] (median)	experiments/depth.html
+radius.b8	0.43	0.42638179180324465	data/fields/r20s0/extra/summary_results.json › diag_final[8].radius_q[1] (median)	experiments/depth.html
+radius.b7	0.41	0.4113398151776809	data/fields/r20s0/extra/summary_results.json › diag_final[7].radius_q[1] (median)	experiments/calibration.html
+strict.tangent.max	0.07%	0.0007	data/fields/r20s0/extra/summary_results.json › coverage_final[*].strict.tangent (max over steps)	experiments/depth.html, index.html
+strict.neighbourhood.max	4.4%	0.0443	data/fields/r20s0/extra/summary_results.json › coverage_final[*].strict.neighbourhood (max over steps)	
+thick.tangent.max	4.8%	0.0481	data/fields/r20s0/extra/summary_results.json › coverage_final[*].thick.tangent (max over steps)	
+fit9.min	99.60%	0.996	data/fields/r20s0/extra/summary_results.json › coverage_final[*].flow.relmotion_fitsplit (min over steps)	experiments/depth.html, index.html
+fit9.max	99.91%	0.9991	data/fields/r20s0/extra/summary_results.json › coverage_final[*].flow.relmotion_fitsplit (max over steps)	experiments/depth.html, index.html
+flow.gain.max	1.03%	0.0103	data/fields/r20s0/extra/summary_results.json › coverage_final[*].flow.gain_ic (max over steps)	
+flow.strain.max_early	0.04%	0.0004	data/fields/r20s0/extra/summary_results.json › coverage_final[stem->b1..b7->b8].flow.strain_ic (max)	
+flow.strain.last	10%	0.1004	data/fields/r20s0/extra/summary_results.json › coverage_final[b8->b9].flow.strain_ic	
+flow.sfin.max	1.7%	0.0171	data/fields/r20s0/extra/summary_results.json › coverage_final[*].flow.strain_finite_ic (max over steps)	
+E.last	−7.9	-7.9006612164784915	data/fields/r20s0/extra/summary_results.json › final › flow:ic_E_trace[8][0] (mean over released images)	experiments/depth.html, index.html
+ke.0	0.066	0.06622005437865837	data/fields/r20s0/extra/summary_results.json › final › flow:ke[0][0]	
+rigid.0	0.80	0.7982087265549164	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global[0][0]	experiments/depth.html
+ke.1	0.117	0.11651513362801816	data/fields/r20s0/extra/summary_results.json › final › flow:ke[1][0]	
+rigid.1	0.89	0.8927304244163435	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global[1][0]	experiments/depth.html, index.html
+ke.2	0.072	0.07172547469235815	data/fields/r20s0/extra/summary_results.json › final › flow:ke[2][0]	
+rigid.2	0.90	0.9033290800690629	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global[2][0]	experiments/depth.html, index.html
+ke.3	0.090	0.09023610619803324	data/fields/r20s0/extra/summary_results.json › final › flow:ke[3][0]	
+rigid.3	0.28	0.280851131640262	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global[3][0]	experiments/depth.html
+ke.4	0.060	0.06022303044809348	data/fields/r20s0/extra/summary_results.json › final › flow:ke[4][0]	
+rigid.4	0.62	0.6160194670518675	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global[4][0]	
+ke.5	0.104	0.10392616966462179	data/fields/r20s0/extra/summary_results.json › final › flow:ke[5][0]	
+rigid.5	0.72	0.7248681403196169	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global[5][0]	
+ke.6	0.648	0.6479705686563108	data/fields/r20s0/extra/summary_results.json › final › flow:ke[6][0]	
+rigid.6	0.52	0.5206682987610005	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global[6][0]	
+ke.7	0.231	0.23123153390265397	data/fields/r20s0/extra/summary_results.json › final › flow:ke[7][0]	index.html
+rigid.7	0.33	0.3269489140214251	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global[7][0]	
+ke.8	1.50	1.501278482621887	data/fields/r20s0/extra/summary_results.json › final › flow:ke[8][0]	experiments/depth.html, index.html
+rigid.8	0.05	0.05002748457451989	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global[8][0]	experiments/depth.html, index.html
+rigid.final.min	0.05	0.05002748457451989	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global (min over steps)	experiments/training.html
+rigid.final.max	0.90	0.9033290800690629	data/fields/r20s0/extra/summary_results.json › final › flow:rigid_fraction_global (max over steps)	experiments/training.html
+ke.ratio	6.5	6.492533510822574	data/fields/r20s0/extra/summary_results.json › final › flow:ke[8][0] / flow:ke[7][0]	experiments/depth.html
+split.closure	2.15×10⁻¹⁶	2.1531153799173315e-16	data/fields/r20s0/totals_64000.json › [l].flow:split:relmotion_shift_slope_res:(shift + slope + icres - relmotion) / relmotion (max over steps)	experiments/depth.html
+split.supp.min	99.60%	0.996	data/fields/r20s0/totals_64000.json › [l].flow:split:relmotion_shift_slope_res:relmotion.mass_fraction (min)	experiments/depth.html
+split.supp.max	99.91%	0.9991	data/fields/r20s0/totals_64000.json › [l].flow:split:relmotion_shift_slope_res:relmotion.mass_fraction (max)	experiments/depth.html
+anch.fit.stem	61.3%	0.6131946484547633	data/fields/r20s0/totals_64000.json › [0].diag:anchored:flow:split:relmotion_fit_res:relmotion_fit / diag:anchored:flow:split:relmotion_fit_res:relmotion (diagnostic)	experiments/calibration.html
+slope.share.stem	26.7%	0.2673361719272572	data/fields/r20s0/totals_64000.json › [0].flow:split:relmotion_shift_slope_res:relmotion_slope / flow:split:relmotion_shift_slope_res:relmotion	experiments/calibration.html
+relm.mass.min	99.98%	0.9998	data/fields/r20s0/extra/summary_results.json › final › flow:relmotion[*][1] (min mass fraction)	experiments/depth.html, index.html
+resmed.min	0.21	0.21391181596330222	data/fields/r20s0/extra/summary_results.json › final › median:flow:residual_fraction (min over steps)	experiments/depth.html
+resmed.max	0.52	0.5217463337353798	data/fields/r20s0/extra/summary_results.json › final › median:flow:residual_fraction (max over steps)	experiments/depth.html
+split.mass.min	99.60%	0.996	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction / flow:relmotion_shift [*][1] (min mass fraction)	
+slopemed.0	0.32	0.32467466601792117	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction[0][0]	
+slopemed.1	0.13	0.1313880514727185	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction[1][0]	
+slopemed.2	0.26	0.26354931263264836	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction[2][0]	
+slopemed.3	0.47	0.46638171848349125	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction[3][0]	
+slopemed.4	0.21	0.20692079193841012	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction[4][0]	
+slopemed.5	0.15	0.14996549235709156	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction[5][0]	
+slopemed.6	0.23	0.2318415927170812	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction[6][0]	
+slopemed.7	0.14	0.14363966387080837	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction[7][0]	
+slopemed.8	0.16	0.16438174171963754	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction[8][0]	
+slopemed.min	0.13	0.1313880514727185	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction (min over steps)	experiments/depth.html, index.html
+slopemed.max	0.47	0.46638171848349125	data/fields/r20s0/extra/summary_results.json › final › median:flow:slope_fraction (max over steps)	experiments/depth.html, index.html
+slopeshare.max	40%	0.40302051959400087	data/fields/r20s0/totals_64000.json › [l].flow:split:relmotion_shift_slope_res:relmotion_slope / flow:split:relmotion_shift_slope_res:relmotion (max over steps)	experiments/depth.html
+ho.min	0.49	0.49039380023436857	data/fields/r20s0/extra/summary_results.json › final › median:flow:heldout_ic (min over stem->b1..b7->b8)	experiments/depth.html
+ho.max	0.76	0.76330561650045	data/fields/r20s0/extra/summary_results.json › final › median:flow:heldout_ic (max over stem->b1..b7->b8)	experiments/depth.html
+ho.last	0.21	0.21416328645040872	data/fields/r20s0/extra/summary_results.json › final › median:flow:heldout_ic[8][0]	experiments/depth.html
+hco.max	0.3335	0.3334929804896887	data/fields/r20s0/extra/summary_results.json › final › median:flow:heldout_const (max over stem->b1..b7->b8)	experiments/depth.html
+hid.max	0.342	0.34188556403201337	data/fields/r20s0/extra/summary_results.json › final › median:flow:heldout_identity (max over stem->b1..b7->b8)	experiments/depth.html
+nn.0	+1.15	1.1482352305783177	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[0][0]	
+nn.1	+1.41	1.40742502435048	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[1][0]	
+nn.2	+0.90	0.8969624559096695	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[2][0]	
+nn.3	+1.40	1.4045610043124888	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[3][0]	
+nn.4	+1.01	1.00733699120296	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[4][0]	
+nn.5	+0.75	0.7524766949448848	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[5][0]	
+nn.6	+1.69	1.685161886749708	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[6][0]	
+nn.7	+0.72	0.723193125546328	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[7][0]	
+nn.8	−2.24	-2.238039824155025	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[8][0]	experiments/depth.html, index.html
+nn.min_early	+0.72	0.723193125546328	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio (min over stem->b1..b7->b8)	experiments/depth.html, index.html
+nn.max_early	+1.69	1.685161886749708	data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio (max over stem->b1..b7->b8)	experiments/depth.html, index.html
+nn.factor	9.4	9.374936740512338	exp(-data/fields/r20s0/extra/summary_results.json › final › direct:nn_log_ratio[8][0])	experiments/depth.html, index.html
+vertex.last	71%	0.7071	data/fields/r20s0/extra/summary_results.json › final › direct:near_vertex_to[8][0]	experiments/depth.html, index.html
+vertex.b8	0.0%	0.0	data/fields/r20s0/extra/summary_results.json › final › direct:near_vertex_to[7][0] (share at b8)	
+cov.gain.max	1.03%	0.0103	data/fields/r20s0/depth_64000.npz › log_gain_max (share finite, max over steps)	experiments/depth.html, experiments/training.html, index.html
+cov.E.last	10%	0.1004	data/fields/r20s0/depth_64000.npz › E_trace[8] (share finite)	experiments/depth.html, index.html
+cov.E.max_early	0.04%	0.0004	data/fields/r20s0/depth_64000.npz › E_trace[0..7] (share finite, max)	experiments/depth.html, index.html
+cov.tilt.max	0.7%	0.0066	data/fields/r20s0/depth_64000.npz › tilt (share finite, max over steps)	experiments/depth.html
+scale.radius.change	7.3%	0.07295238995881448	data/fields/r20s0/extra/summary_results.json › scale_radius:scale_k128/k512_eps0.25 vs radius_k256 (max relative change)	experiments/depth.html
+scale.frac.change	0.0153	0.015283086016079445	data/fields/r20s0/extra/summary_results.json › scale:k128/k512_eps0.25 vs final: median slope and shift fractions (max |change|)	experiments/depth.html, index.html
+scale.ho.change	0.05	0.04812798160352205	data/fields/r20s0/extra/summary_results.json › scale:k128/k512_eps0.25 vs final: median held-out score (max |change|)	experiments/depth.html
+scale.eps1.slope	0.044	0.04413421041878318	data/fields/r20s0/extra/summary_results.json › scale:scale_k512_eps1.0.json vs final: median:flow:slope_fraction (max |change|)	experiments/depth.html
+scale.eps1.ho	0.115	0.11463351915334435	data/fields/r20s0/extra/summary_results.json › scale:scale_k512_eps1.0.json minus final: median:flow:heldout_ic (max)	experiments/depth.html
+radius.ratio	9	9.131147042761759	data/fields/r20s0/extra/summary_results.json › diag_final[8].radius_q[1] / diag_final[0].radius_q[1]	experiments/depth.html
+scale.eps1.radius	1.41	1.4076435972992425	data/fields/r20s0/extra/summary_results.json › scale_radius:scale_k512_eps1.0.json / radius_k256 (max)	experiments/depth.html
+sub.n	5	5	data/fields/r20s0/extra/subsample.json › n_subsets	
+sub.size	5,000	5000	data/fields/r20s0/extra/subsample.json › size	experiments/depth.html
+sub.frac.sd	0.009	0.008551055513434195	data/fields/r20s0/extra/summary_results.json › subsample › median fractions and scores [*][1] (max sd)	experiments/depth.html
+sub.ke.sd	0.0085	0.008488257298181956	data/fields/r20s0/extra/summary_results.json › subsample › flow:ke[*][1] (max sd)	experiments/depth.html
+sub.rigid.sd	0.004	0.003685376595666799	data/fields/r20s0/extra/summary_results.json › subsample › flow:rigid_fraction_global[*][1] (max sd)	experiments/depth.html
+sub.ke.sd.last	0.008	0.008488257298181956	data/fields/r20s0/extra/summary_results.json › subsample › flow:ke[8][1]	
+seed1.ke.last	1.48	1.4823172003736884	data/fields/r20s0/extra/summary_results.json › seed1 › flow:ke[8][0]	experiments/depth.html, index.html
+seed1.rigid.last	0.05	0.04919806782228142	data/fields/r20s0/extra/summary_results.json › seed1 › flow:rigid_fraction_global[8][0]	experiments/depth.html, index.html
+seed1.nn.last	−2.14	-2.1390468681179566	data/fields/r20s0/extra/summary_results.json › seed1 › direct:nn_log_ratio[8][0]	experiments/depth.html, index.html
+seed1.vertex.last	71%	0.7089	data/fields/r20s0/extra/summary_results.json › seed1 › direct:near_vertex_to[8][0]	experiments/depth.html
+tr.ke.first	0.36	0.3557624382135249	data/fields/r20s0/extra/summary_results.json › depth_over_training › flow:ke['0'][8]	experiments/training.html
+tr.ke.min	0.011	0.01052355980138805	data/fields/r20s0/extra/summary_results.json › depth_over_training › flow:ke[*][8] (min)	experiments/training.html
+tr.ke.min.step	5	5	data/fields/r20s0/extra/summary_results.json › depth_over_training › flow:ke[*][8] (argmin step)	
+tr.ke.last	1.50	1.501278482621887	data/fields/r20s0/extra/summary_results.json › depth_over_training › flow:ke['64000'][8]	experiments/training.html
+tr.rigid.first	0.98	0.9821043199623499	data/fields/r20s0/extra/summary_results.json › depth_over_training › flow:rigid_fraction_global['0'][8]	experiments/training.html, index.html
+tr.rigid.last	0.05	0.05002748457451989	data/fields/r20s0/extra/summary_results.json › depth_over_training › flow:rigid_fraction_global['64000'][8]	experiments/training.html, index.html
+tr.rigid0.min	0.81	0.8071069365242018	data/fields/r20s0/extra/summary_results.json › depth_over_training › flow:rigid_fraction_global['0'] (min over depth steps)	experiments/training.html
+tr.vertex.pre1024	1.33%	0.0133	data/fields/r20s0/extra/summary_results.json › depth_over_training › direct:near_vertex_to[step < 1024][8] (max)	experiments/training.html, index.html
+tr.vertex.1024	1.8%	0.0175	data/fields/r20s0/extra/summary_results.json › depth_over_training › direct:near_vertex_to['1024'][8]	experiments/training.html
+tr.vertex.2560	12%	0.1231	data/fields/r20s0/extra/summary_results.json › depth_over_training › direct:near_vertex_to['2560'][8]	experiments/training.html
+tr.vertex.last	71%	0.7071	data/fields/r20s0/extra/summary_results.json › depth_over_training › direct:near_vertex_to['64000'][8]	experiments/training.html, index.html
+tr.nn.firstneg	7,680	7680	data/fields/r20s0/extra/summary_results.json › depth_over_training › direct:nn_log_ratio[*][8] (first step < 0)	experiments/training.html
+tr.nn.lastpos	11,520	11520	data/fields/r20s0/extra/summary_results.json › depth_over_training › direct:nn_log_ratio[*][8] (last step >= 0)	experiments/training.html
+tr.slope8.max	0.57	0.5749712682219119	data/fields/r20s0/extra/summary_results.json › depth_over_training › median:flow:slope_fraction[*][8] (max)	experiments/training.html
+tr.slope8.argmax	128	128	data/fields/r20s0/extra/summary_results.json › depth_over_training › median:flow:slope_fraction[*][8] (argmax step)	experiments/training.html
+tr.slope8.last	0.16	0.16438174171963754	data/fields/r20s0/extra/summary_results.json › depth_over_training › median:flow:slope_fraction['64000'][8]	experiments/training.html
+tr.slope.max	0.66	0.659171146978255	data/fields/r20s0/extra/summary_results.json › depth_over_training › median:flow:slope_fraction (max over steps and depth)	experiments/training.html
+tr.slope.max.step	32	32	data/fields/r20s0/extra/summary_results.json › depth_over_training › median:flow:slope_fraction (argmax step)	experiments/training.html
+tr.split.mass.min	88.50%	0.885	data/fields/r20s0/totals_<step>.json › [l].median:flow:slope_fraction.mass_fraction (min over 40 checkpoints and 9 steps)	experiments/training.html
+fit9.min.all	88.5%	0.885	data/fields/r20s0/extra/coverage_<step>.json › [l].flow.relmotion_fitsplit (min over 40 checkpoints and 9 steps)	index.html
+tr.gain.early.max	74.5%	0.7448	data/fields/r20s0/extra/coverage_<step>.json (step <= 16) › [l].flow.gain_ic (max)	experiments/training.html
+tr.gain.late.max	17.1%	0.1705	data/fields/r20s0/extra/coverage_<step>.json (step >= 2560) › [l].flow.gain_ic (max)	experiments/training.html
+tc.ratio.min	1.81×10⁹	1809750510.3680544	data/fields/r20s0/extra/summary_results.json › training_clock['1'].flow:ke / ['64000'].flow:ke (min over sites)	experiments/training.html, index.html
+tc.ratio.max	2.47×10¹⁰	24682375378.769867	data/fields/r20s0/extra/summary_results.json › training_clock['1'].flow:ke / ['64000'].flow:ke (max over sites)	experiments/training.html, index.html
+tc.peak.latest	16	16	data/fields/r20s0/extra/summary_results.json › training_clock › flow:ke (argmax interval end step per site, max over sites)	experiments/training.html, index.html
+tc.peak.first.n	1	1	data/fields/r20s0/extra/summary_results.json › training_clock › flow:ke (sites whose argmax is the first interval)	experiments/training.html
+tc.rigid.stem	0.96	0.9554252057962056	data/fields/r20s0/extra/summary_results.json › training_clock['64000'].flow:rigid_fraction_global[0]	experiments/training.html
+tc.rigid.b9	0.01	0.013341054466983748	data/fields/r20s0/extra/summary_results.json › training_clock['64000'].flow:rigid_fraction_global[9]	experiments/training.html
+tc.dt.last	12,800	12800	data/fields/r20s0/extra/summary_results.json › training_clock['64000'].dt	experiments/training.html
+fx.radius	0.44	0.43985919348774827	data/fixture_matched/rep_v4.json › regime › smooth_s0_k256_e0.25.radius_quantiles[1]	experiments/calibration.html
+fx.onesided	0.84	0.8419939323027974	data/fixture_matched/rep_v4.json › regime › smooth_s0_k256_e0.25.one_sided_median	experiments/calibration.html
+fx.radius.lo	0.38	0.3766878131997351	data/fixture_matched/rep_v4.json › regime › smooth_s0_k256_e0.25.radius_quantiles[0]	experiments/calibration.html
+fx.radius.hi	0.56	0.5577513240068845	data/fixture_matched/rep_v4.json › regime › smooth_s0_k256_e0.25.radius_quantiles[2]	experiments/calibration.html
+fx.anch.end	6.2%	0.061845775693655014	data/fixture_matched/rep_v4.json › edge_vs_endpoint_s0.anch_endpoint	experiments/calibration.html, experiments/depth.html
+fx.ic.end	1.0%	0.010044006630778313	data/fixture_matched/rep_v4.json › edge_vs_endpoint_s0.ic_endpoint	experiments/calibration.html, experiments/depth.html
+fx.anch.edge	1.2%	0.012064583599567413	data/fixture_matched/rep_v4.json › edge_vs_endpoint_s0.anch_edge	experiments/calibration.html
+fx.ic.edge	1.3%	0.013487391173839569	data/fixture_matched/rep_v4.json › edge_vs_endpoint_s0.ic_edge	experiments/calibration.html
+fx.anch.end.s1	6.6%	0.06618812680244446	data/fixture_matched/rep_v4.json › edge_vs_endpoint_s1.anch_endpoint	experiments/calibration.html
+fx.ic.end.s1	1.1%	0.010709710419178009	data/fixture_matched/rep_v4.json › edge_vs_endpoint_s1.ic_endpoint	experiments/calibration.html
+fx.ho.clean	0.991	0.9914928078651428	data/fixture_matched/final_eval.json › s0:smooth:clean.heldout_ic_median	experiments/calibration.html
+fx.or.clean	0.985	0.9853048622608185	data/fixture_matched/final_eval.json › s0:smooth:clean.oracle_median	experiments/calibration.html
+fx.ho.06	0.91	0.9148590266704559	data/fixture_matched/final_eval.json › s0:smooth:endpoint0.6.heldout_ic_median	experiments/calibration.html
+fx.or.06	0.85	0.8521055579185486	data/fixture_matched/final_eval.json › s0:smooth:endpoint0.6.oracle_median	experiments/calibration.html
+fx.ho.15	0.71	0.710811048746109	data/fixture_matched/final_eval.json › s0:smooth:endpoint1.5.heldout_ic_median	experiments/calibration.html
+fx.or.15	0.50	0.4983537793159485	data/fixture_matched/final_eval.json › s0:smooth:endpoint1.5.oracle_median	experiments/calibration.html
+fx.shuf.ho	0.32	0.3151058554649353	data/fixture_matched/rep_v4.json › baselines_median › smooth:shuffled.heldout_ic	experiments/calibration.html
+fx.shuf.const	0.35	0.3511020392179489	data/fixture_matched/rep_v4.json › baselines_median › smooth:shuffled.heldout_const	experiments/calibration.html
+fx.clean.id	−0.33	-0.33463282883167267	data/fixture_matched/rep_v4.json › baselines_median › smooth:clean.heldout_identity	experiments/calibration.html
+fx.rank8.true	−26.6	-26.642020225524902	data/fixture_matched/rep_v4.json › contrasts › rank8:endpoint0.6.true_ls9_median	experiments/calibration.html
+fx.rank8.est	−2.9	-2.9386359453201294	data/fixture_matched/rep_v4.json › contrasts › rank8:endpoint0.6.est_ls9_median	experiments/calibration.html
+fx.rank8.loss	0%	0.0	data/fixture_matched/rep_v4.json › contrasts › rank8:endpoint0.6.rank_loss_frac	experiments/calibration.html
+fx.rank8.loss.clean	100%	1.0	data/fixture_matched/rep_v4.json › contrasts › rank8:clean.rank_loss_frac	experiments/calibration.html
+fx.along.logJ	1.07	1.0658436878584325	data/fixture_matched/rep_v4.json › contrasts › weakcomp:along0.6.logJ.bias	experiments/calibration.html
+fx.along.iclogJ	0.38	0.3768828213214874	data/fixture_matched/rep_v4.json › contrasts › weakcomp:along0.6.ic_logJ.bias	experiments/calibration.html
+fx.near.true	−5.3	-5.263457775115967	data/fixture_matched/rep_v4.json › contrasts › nearsing:endpoint0.6.true_ls9_median	experiments/calibration.html
+fx.near.est	−2.9	-2.948769688606262	data/fixture_matched/rep_v4.json › contrasts › nearsing:endpoint0.6.est_ls9_median	experiments/calibration.html
+tol.gain	0.1	0.1	data/fixture_matched/final_eval.json › tolerances.ic_log_gain_max	
+gate.heldout_min	0.5	0.5	data/fixture_matched/final_eval.json › gates.heldout_min	experiments/calibration.html, experiments/depth.html
+gate.slope_gain_min	0.5	0.5	data/fixture_matched/final_eval.json › gates.slope_gain_min	experiments/calibration.html, experiments/depth.html
+gate.cond_centred_max	50	50.0	data/fixture_matched/final_eval.json › gates.cond_centred_max	experiments/calibration.html, experiments/depth.html
+gate.identity_gain_min	0.3	0.3	data/fixture_matched/final_eval.json › gates.identity_gain_min	experiments/calibration.html, experiments/depth.html
+gate.identity_exact_min	0.95	0.95	data/fixture_matched/final_eval.json › gates.identity_exact_min	experiments/calibration.html, experiments/depth.html
+gate.n_eff_per_dim_strain	2	2.0	data/fixture_matched/final_eval.json › gates.n_eff_per_dim_strain	experiments/calibration.html
+fx.gain.clean.s0	94.6%	0.9461	data/fixture_matched/final_eval.json › s0:smooth:clean.ic_log_gain_max.coverage	experiments/calibration.html
+fx.gain.10.s0	86.5%	0.8649	data/fixture_matched/final_eval.json › s0:smooth:endpoint1.0.ic_log_gain_max.coverage	experiments/calibration.html
+fx.gain.clean.s1	93.4%	0.9341	data/fixture_matched/final_eval.json › s1:smooth:clean.ic_log_gain_max.coverage	experiments/calibration.html
+fx.gain.10.s1	81.0%	0.8095	data/fixture_matched/final_eval.json › s1:smooth:endpoint1.0.ic_log_gain_max.coverage	experiments/calibration.html
+fx.idn.pre.cov.s0	92.1%	0.9208	data/fixture_matched/final_eval.json › pre_identity_gate › s0:controls:identity_noise0.6.ic_log_gain_max.coverage	experiments/calibration.html
+fx.idn.pre.fr.s0	98%	0.9843614248479583	data/fixture_matched/final_eval.json › pre_identity_gate › s0:controls:identity_noise0.6.ic_log_gain_max.false_release	experiments/calibration.html
+fx.idn.cov.s0	0.38%	0.0038	data/fixture_matched/final_eval.json › s0:controls:identity_noise0.6.ic_log_gain_max.coverage	experiments/calibration.html
+fx.idn.fr.s0	97.4%	0.9736842105263158	data/fixture_matched/final_eval.json › s0:controls:identity_noise0.6.ic_log_gain_max.false_release	experiments/calibration.html
+fx.idn.pre.cov.s1	91.2%	0.9123	data/fixture_matched/final_eval.json › pre_identity_gate › s1:controls:identity_noise0.6.ic_log_gain_max.coverage	experiments/calibration.html
+fx.idn.pre.fr.s1	98%	0.9793927436150389	data/fixture_matched/final_eval.json › pre_identity_gate › s1:controls:identity_noise0.6.ic_log_gain_max.false_release	experiments/calibration.html
+fx.idn.cov.s1	0.43%	0.0043	data/fixture_matched/final_eval.json › s1:controls:identity_noise0.6.ic_log_gain_max.coverage	experiments/calibration.html
+fx.idn.fr.s1	97.7%	0.9767441860465116	data/fixture_matched/final_eval.json › s1:controls:identity_noise0.6.ic_log_gain_max.false_release	experiments/calibration.html
+fx.fr.scatter.max	10.5%	0.10498409331919406	data/fixture_matched/final_eval.json › s0/s1:smooth:endpoint0.3/0.6/1.0.{4 ic fields}.false_release (max)	experiments/calibration.html
+fx.fr.15.max	21%	0.2071917808219178	data/fixture_matched/final_eval.json › s0/s1:smooth:endpoint1.5.{4 ic fields}.false_release (max)	experiments/calibration.html
+fx.cov.15.max	24%	0.2387	data/fixture_matched/final_eval.json › s0/s1:smooth:endpoint1.5.{4 ic fields}.coverage (max)	experiments/calibration.html
+fx.cov.clean.min	93%	0.9341	data/fixture_matched/final_eval.json › s0/s1:smooth:clean.{4 ic fields}.coverage (min)	
+fx.fr.curved.min	5%	0.04604985213350232	data/fixture_matched/final_eval.json › s0/s1:curved:clean.{ic fields}.false_release (min)	experiments/calibration.html
+fx.fr.curved.max	29%	0.2857142857142857	data/fixture_matched/final_eval.json › s0/s1:curved:clean.{ic fields}.false_release (max)	experiments/calibration.html
+lens.n	73	73	data/lens/r20s0/meta.json › steps (count)	experiments/calibration.html
+lens.worst	6.75×10⁻¹⁴	6.750155989720952e-14	data/lens/r20s0/checks_15.json › c.b7->b8.max_abs (max over all checks and checkpoints)	experiments/calibration.html
+lens.passed	all	1.0	data/lens/r20s0/checks_*.json › passed (all)	experiments/calibration.html
+acc.stem	10%	0.1	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[0]	experiments/calibration.html
+acc.b1	10%	0.1	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[1]	experiments/calibration.html
+acc.b2	14%	0.1388	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[2]	
+acc.b3	14%	0.1383	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[3]	
+acc.b4	16%	0.1599	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[4]	
+acc.b5	14%	0.1439	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[5]	
+acc.b6	17%	0.1691	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[6]	
+acc.b7	39%	0.3851	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[7]	experiments/calibration.html
+acc.b8	65%	0.6514	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[8]	experiments/calibration.html
+acc.b9	91.56%	0.9156	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[9]	experiments/calibration.html
+acc.model	91.56%	0.9156	data/lens/r20s0/checks_64000.json › model_top1_accuracy	experiments/calibration.html
+acc.mid.min	14%	0.1383	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[2..6] (min)	experiments/calibration.html
+acc.mid.max	17%	0.1691	data/lens/r20s0/checks_64000.json › lens_top1_accuracy[2..6] (max)	experiments/calibration.html

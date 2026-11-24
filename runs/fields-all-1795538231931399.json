@@ -1,0 +1,13 @@
+{
+ "stage": "all",
+ "app": "mm-manifoldmotion-fields",
+ "call_id": "fc-01M876P8Y7N4N1WCSYDD8PWX63",
+ "launched_at": 1795538231.9313998,
+ "launched_utc": "2026-11-24T16:37:11Z",
+ "reserved_usd": 8.783593499999998,
+ "result": {
+  "error": "cancelled by operator at 17:40Z: 4 units (ckpt 9, 5120, 11520, 21760) were preempted; Modal restarted them, and the claim guard (fresh claim from the preempted attempt) made the restarts skip, so the coordinator waited for done-markers that could not appear. 41 of 45 units finished.",
+  "spend_with_startup_reserve_usd": 8.783593499999998,
+  "estimated_usd_note": "about 41 x 1550 s x 7.0e-5 USD/s = 4.45 USD plus partial work on the 4 preempted units"
+ }
+}

@@ -1,0 +1,15 @@
+{
+  "stage": "pilot",
+  "app": "mm-manifoldmotion-lens",
+  "call_id": "fc-01M85TS53FB8D37HKVYZK8QABM",
+  "gpu": [
+    "L4",
+    "T4"
+  ],
+  "launched_at": 1795492188.9248781,
+  "launched_utc": "2026-11-24T03:49:48Z",
+  "reserved_usd": 0.03326685,
+  "result": {
+    "error": "RuntimeError('Checkpoint failures for seed 0: {\\'64000\\': \"FileNotFoundError(2, \\'No such file or directory\\')\"}')"
+  }
+}

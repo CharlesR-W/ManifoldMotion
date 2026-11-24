@@ -1,0 +1,12 @@
+{
+  "stage": "pilot",
+  "app": "mm-manifoldmotion-lens",
+  "call_id": "fc-01M85TBZ3JWYPFHZ5JEY2AD0RR",
+  "gpu": "L4",
+  "launched_at": 1795491756.821638,
+  "launched_utc": "2026-11-24T03:42:36Z",
+  "reserved_usd": 0.03326685,
+  "result": {
+    "error": "RuntimeError('Checkpoint failures for seed 0: {\\'64000\\': \"OSError(30, \\'Read-only file system\\')\"}')"
+  }
+}

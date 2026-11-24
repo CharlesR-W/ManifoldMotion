@@ -1,0 +1,200 @@
+[
+ {
+  "name": "speed",
+  "label": "Speed",
+  "group": "Motion",
+  "scale": "sequential",
+  "units": "Fisher-Rao distance per block (vertex to vertex = \u03c0)",
+  "description": "Fisher-Rao distance between the image's output distribution read at this site and at the next (the length of the displacement). Defined at every point; no neighbourhood involved.",
+  "clock": "depth"
+ },
+ {
+  "name": "nonrigid_speed",
+  "label": "Non-rigid speed",
+  "group": "Motion",
+  "scale": "sequential",
+  "units": "Fisher-Rao distance per block",
+  "description": "Speed after removing the single finite rotation of the whole sphere that best carries this site's cloud onto the next (orthogonal Procrustes over all 10,000 images): the part of the image's move that is not a rigid turn of the whole cloud. The headline rigid fraction of kinetic energy uses a different fit (the least-squares instantaneous rotation field), so the two are not complements.",
+  "clock": "depth"
+ },
+ {
+  "name": "path_length",
+  "label": "Path length so far",
+  "group": "Motion",
+  "scale": "sequential",
+  "units": "Fisher-Rao distance",
+  "description": "Sum of the image's speeds over the steps from the stem up to and including this step (so row l is the distance travelled from the stem to site l + 1 along the depth path).",
+  "clock": "depth"
+ },
+ {
+  "name": "toward_label",
+  "label": "Move toward label vertex",
+  "group": "Motion",
+  "scale": "diverging",
+  "units": "Fisher-Rao distance per block",
+  "description": "Component of the image's displacement along the shortest path to the vertex of its true class (one-hot distribution): positive = moving toward the correct class, negative = away. Defined at every point.",
+  "clock": "depth"
+ },
+ {
+  "name": "radius",
+  "label": "Neighbourhood radius",
+  "group": "Neighbourhood",
+  "scale": "sequential",
+  "units": "Fisher-Rao distance (rms over the neighbourhood weights)",
+  "description": "Size of the neighbourhood every local quantity below is measured at: the root-mean-square Fisher-Rao distance from the image to its neighbours under the graph weights (k = 256 nearest neighbours, adaptive Gaussian kernel). Local quantities are at this scale, not pointwise derivatives.",
+  "clock": "depth"
+ },
+ {
+  "name": "local_dim",
+  "label": "Local dimension (participation ratio)",
+  "group": "Neighbourhood",
+  "scale": "sequential",
+  "units": "dimensions (1 to 9)",
+  "description": "(sum of eigenvalues)^2 / (sum of squared eigenvalues) of the weighted second moment of the offsets to the neighbours, in the 9-dimensional tangent space: about 9 for an isotropic neighbourhood, about 1 for a line. A smooth count of the directions the neighbourhood spreads in, with no cutoff.",
+  "clock": "depth"
+ },
+ {
+  "name": "one_sided",
+  "label": "One-sidedness",
+  "group": "Neighbourhood",
+  "scale": "sequential",
+  "units": "neighbourhood mean / spread",
+  "description": "Distance from the image to the weighted mean of its neighbours, in units of the neighbourhood's own spread (all 9 directions). Near 0 in the middle of a cloud; near 1 at an edge. For a 9-dimensional blob most points are at an edge in this sense.",
+  "clock": "depth"
+ },
+ {
+  "name": "vertex_distance",
+  "label": "Distance to nearest vertex",
+  "group": "Neighbourhood",
+  "scale": "sequential",
+  "units": "Fisher-Rao distance (0 = one-hot)",
+  "description": "Fisher-Rao distance from the image's distribution at this site to the nearest one-hot distribution (simplex vertex): small = confident prediction of some class.",
+  "clock": "depth"
+ },
+ {
+  "name": "relmotion",
+  "label": "Relative motion",
+  "group": "Relative motion",
+  "scale": "sequential",
+  "units": "(Fisher-Rao distance per block)^2 per unit kernel time",
+  "description": "Weighted mean squared difference between the image's displacement and its neighbours' displacements (each neighbour's carried over to this image along the shortest path), divided by 2\u03c4: how much the neighbourhood is torn apart or reshaped in this step. Directly measured, no fit.",
+  "clock": "depth"
+ },
+ {
+  "name": "nn_log_ratio",
+  "label": "Log change of neighbour distances",
+  "group": "Relative motion",
+  "scale": "diverging",
+  "units": "natural log (0 = unchanged, -1 = distances shrink by e)",
+  "description": "Mean over the image's 16 nearest neighbours (at this site) of log(distance at the next site / distance at this site). Direct, fit-free measure of local contraction (negative) or expansion (positive) at the smallest scale; NaN where a distance is below numerical resolution.",
+  "clock": "depth"
+ },
+ {
+  "name": "shift_fraction",
+  "label": "Relative motion: shared shift",
+  "group": "Relative motion",
+  "scale": "sequential",
+  "units": "fraction (in-sample)",
+  "description": "Fraction of the relative motion that is a shift common to the whole neighbourhood: the weighted mean of the neighbours' displacement differences (carried to this image), i.e. the image moving relative to its neighbourhood as a block. From the free-intercept fit of the displacement differences on the neighbours' offsets in all 9 directions; shown only where all 9 directions are resolved. Shift + linear + not-linear fractions = 1.",
+  "clock": "depth"
+ },
+ {
+  "name": "slope_fraction",
+  "label": "Relative motion: linear deformation",
+  "group": "Relative motion",
+  "scale": "sequential",
+  "units": "fraction (in-sample)",
+  "description": "Fraction of the relative motion reproduced by the linear (slope) part of the same free-intercept fit: displacement differences that vary linearly with the neighbour's offset, i.e. a linear deformation of the neighbourhood at its radius. Shown only where all 9 directions are resolved.",
+  "clock": "depth"
+ },
+ {
+  "name": "residual_fraction",
+  "label": "Relative motion: not linear",
+  "group": "Relative motion",
+  "scale": "sequential",
+  "units": "fraction (in-sample)",
+  "description": "Fraction of the relative motion left after the shared shift and the linear part: separation not explained by this fit (nonlinear deformation, tearing, scatter). Shown only where all 9 directions are resolved.",
+  "clock": "depth"
+ },
+ {
+  "name": "heldout",
+  "label": "Held-out prediction score",
+  "group": "Relative motion",
+  "scale": "diverging",
+  "units": "1 - test error / test energy",
+  "description": "Out-of-sample score (5 folds of neighbours) of the linear predictor, with a free constant term, of next-site neighbour offsets from this-site offsets: 1 - squared prediction error / squared offset, i.e. the improvement over predicting zero offset. Not a centred R\u00b2; read it against the two baseline scores below. Shown only where all 9 directions are resolved.",
+  "clock": "depth"
+ },
+ {
+  "name": "heldout_identity",
+  "label": "Score of 'no deformation'",
+  "group": "Relative motion",
+  "scale": "diverging",
+  "units": "1 - error / energy",
+  "description": "The same score for the baseline that predicts each next-site offset as the this-site offset carried along unchanged (no deformation). Close to the held-out score = the fit adds little over 'nothing changes shape'.",
+  "clock": "depth"
+ },
+ {
+  "name": "heldout_const",
+  "label": "Score of a constant offset",
+  "group": "Relative motion",
+  "scale": "diverging",
+  "units": "1 - error / energy",
+  "description": "The same score for the baseline that predicts every next-site offset by one common vector (the training neighbours' mean). High = the next-site offsets are dominated by a shared shift (e.g. the image's own move relative to its neighbours), not by positions.",
+  "clock": "depth"
+ },
+ {
+  "name": "log_gain_max",
+  "label": "Largest log gain",
+  "group": "Strain (flow reading)",
+  "scale": "sequential",
+  "units": "natural log (0 = no change)",
+  "description": "Log of the largest singular value of the fitted linear predictor (free intercept, all 9 directions, at the neighbourhood radius): the strongest stretching gain of the best graph-weighted linear prediction of next-site offsets. A statistic of the fitted slope, not the stretch of any particular pair of images. Released where the fit passes the flow gates; the calibration fixture's tolerance for this field is 0.1.",
+  "clock": "depth"
+ },
+ {
+  "name": "E_trace",
+  "label": "Expansion rate",
+  "group": "Strain (flow reading)",
+  "scale": "diverging",
+  "units": "per block",
+  "description": "Trace of the symmetric part of the fitted gradient of the displacement field (free intercept, all 9 directions, at the neighbourhood radius): positive where the fitted slope spreads neighbours apart, negative where it draws them together. A statistic of the fitted slope, not a measured volume change. Released where the displacement-difference fit passes the flow gates.",
+  "clock": "depth"
+ },
+ {
+  "name": "strain_rate",
+  "label": "Strain rate",
+  "group": "Strain (flow reading)",
+  "scale": "sequential",
+  "units": "per block, squared",
+  "description": "Squared Frobenius norm of the symmetric part of the fitted displacement gradient (free intercept, all 9 directions, at the neighbourhood radius). A statistic of the fitted slope of neighbours' displacement differences, not a measured deformation of the cloud. Released where the displacement-difference fit passes the flow gates.",
+  "clock": "depth"
+ },
+ {
+  "name": "spin",
+  "label": "Spin",
+  "group": "Strain (flow reading)",
+  "scale": "sequential",
+  "units": "per block, squared",
+  "description": "Squared Frobenius norm of the antisymmetric part of the fitted displacement gradient (free intercept, all 9 directions, at the neighbourhood radius). A statistic of the fitted slope of neighbours' displacement differences. Released where the displacement-difference fit passes the flow gates.",
+  "clock": "depth"
+ },
+ {
+  "name": "leading_fraction",
+  "label": "Displacement along leading directions",
+  "group": "Thick/thin (secondary)",
+  "scale": "sequential",
+  "units": "fraction of squared displacement",
+  "description": "Fraction of the squared displacement lying in the leading eigenspace of the source offsets' second moment at this radius (eigenvalues >= 0.1 of the largest), released only where that eigenspace is stable (same rank at cutoffs 0.05 and 0.2 and for the centred covariance, stable under split samples, clear eigengap). Not a tangent/normal split of a manifold.",
+  "clock": "depth"
+ },
+ {
+  "name": "tilt",
+  "label": "Turn of leading directions",
+  "group": "Thick/thin (secondary)",
+  "scale": "sequential",
+  "units": "radians",
+  "description": "Largest principal angle between the leading eigenspace at this site (carried along the displacement) and the leading eigenspace at the next site: change of orientation of the cloud's thick directions. Same release condition as the previous field, at both sites.",
+  "clock": "depth"
+ }
+]
