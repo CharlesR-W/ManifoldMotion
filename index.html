@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ManifoldMotion</title>
+<meta name="description" content="The 10,000 CIFAR-10 test images as a cloud of points in the raw activation space of a ResNet-20, measured as it moves from block to block and over training.">
+<meta name="color-scheme" content="light dark">
+<link rel="preload" href="vendor/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="vendor/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<link rel="stylesheet" href="css/site.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 14 A12 12 0 0 1 14 2' fill='none' stroke='%232a78d6' stroke-width='2'/%3E%3Ccircle cx='5' cy='8.5' r='2' fill='%23eb6834'/%3E%3Ccircle cx='9.5' cy='5' r='2' fill='%2316a39a'/%3E%3C/svg%3E">
+<script type="importmap">{ "imports": { "three": "./vendor/three/three.module.min.js" } }</script>
+</head>
+<body data-tab="overview">
+<a class="skip" href="#main">Skip to content</a>
+<div class="banner" role="note">
+  <span class="banner-tag">Research notebook</span>
+  <span>One network (ResNet-20 on CIFAR-10, seed 0); raw activations at ten sites; measured at 40 checkpoints and the 39 intervals between them.</span>
+</div>
+<nav class="tabs" aria-label="Sections">
+  <div class="tabs-inner">
+    <a class="tabs-home" href="#overview">ManifoldMotion</a>
+    <div class="tablist" role="tablist">
+      <a role="tab" href="#overview" data-tab="overview">Overview</a>
+      <a role="tab" href="#explorer" data-tab="explorer" class="tab-ex">Explorer</a>
+      <a role="tab" href="#experiments" data-tab="experiments">Experiments</a>
+    </div>
+  </div>
+</nav>
+<main id="main">
+
+<section class="tab-panel" id="tab-overview" data-tab="overview">
+  <header class="masthead">
+    <h1 class="title">ManifoldMotion</h1>
+    <p class="subtitle">The CIFAR-10 test set as a cloud of points in a ResNet-20's raw activation space, moving from block to block and over training</p>
+    <p class="cta"><a class="explore-link big" href="#explorer">Open the explorer</a></p>
+  </header>
+  <article class="prose">
+<h2 id="question">The question</h2>
+<p>A residual network changes its representation of an image a little at each block. Put all 10,000 CIFAR-10
+test images through the network and read the activations after each block: at every depth the test set is a cloud of
+points, and from one block to the next, and from one training checkpoint to the next, that cloud moves. The project
+measures the motion as the kinematics of a deforming body. How far does each image move? How much of that is a shift
+of the whole cloud? Which blocks change distances between neighbouring images, and which keep them? How differently
+do neighbours move? The original hope was also to split each image's motion into a part along the cloud and a part
+across it and to measure the cloud's strain; the first result below is that, at the scales 10,000 images give,
+no reproducible local plane was found to define that split on.</p>
+
+<h2 id="space">The space and the moving body</h2>
+<p>The network is a ResNet-20 trained on CIFAR-10 (seed 0; test accuracy 91.56% at the last of
+40 measured checkpoints, step 64,000). Its residual stream is read at ten <b>sites</b>: the stem output and
+the outputs of blocks b1 to b9, after the ReLU, flattened. The sites of one stage share one Euclidean space; the
+three stages are different spaces: 16,384 dimensions for the stem and b1–b3, 8,192 for b4–b6 and 4,096 for b7–b9, all
+coordinates non-negative. Distances are ordinary
+Euclidean distances between raw activations; no readout, lens or learned metric is applied.</p>
+<p>The <b>material points</b> are the test images, each with mass 1/10,000. A <b>block step</b> pairs an image's
+activation before a block, $x$, with its activation after it, $y$; the displacement $v = y - x$ is a chord over one
+block, not a velocity. Within a stage both frames are in the same space. At the two stage changes (into b4 and into
+b7) the network's own shortcut $S$ subsamples the feature map by 2 and appends zero channels; the block step is then
+taken from $S\,x$, and the shortcut alone and the whole step are measured separately, using only distances, because
+they change space. Lengths are reported in units of the source cloud's radius $R$, the RMS distance of its images
+from their centroid. On the training clock a step pairs one site at two consecutive checkpoints.</p>
+<p>One caveat about the metric: within a stage, rescaling a channel by a positive factor can be undone by the next
+layers, so the raw Euclidean metric is one member of a family the network does not distinguish. Raw coordinates are
+primary. With every channel divided by its RMS over the stage, the last block's numbers barely move, but b1→b2's mean
+squared travel rises from 0.69 to 0.95 R² and the small mean log-stretch of b2→b3
+changes sign (−0.025 raw, +0.031 rescaled); see the sensitivity figure on the <a
+href="experiments/audit.html#sens">audit page</a>.</p>
+
+<figure class="fig schematic">
+<svg viewBox="0 0 660 296" role="img" aria-label="Top: the ten sites of the network in three stages, joined by block steps, with the shortcut S at the two stage changes. Bottom: a cloud of radius R in which an image's 128 nearest neighbours lie about as far from it as the cloud's own radius.">
+  <defs><marker id="ovah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--mute)"/></marker>
+  <marker id="ovah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/></marker></defs>
+  <g class="sk">
+    <g font-size="12">
+      <rect x="14" y="30" width="232" height="50" rx="6" class="sk-face"/><text x="130" y="22" text-anchor="middle" class="sk-small">stage 1 · 16,384 dims</text>
+      <rect x="276" y="30" width="176" height="50" rx="6" class="sk-face"/><text x="364" y="22" text-anchor="middle" class="sk-small">stage 2 · 8,192 dims</text>
+      <rect x="482" y="30" width="164" height="50" rx="6" class="sk-face"/><text x="564" y="22" text-anchor="middle" class="sk-small">stage 3 · 4,096 dims</text>
+      <text x="38" y="60" text-anchor="middle">stem</text><text x="96" y="60" text-anchor="middle">b1</text><text x="154" y="60" text-anchor="middle">b2</text><text x="212" y="60" text-anchor="middle">b3</text>
+      <text x="306" y="60" text-anchor="middle">b4</text><text x="364" y="60" text-anchor="middle">b5</text><text x="422" y="60" text-anchor="middle">b6</text>
+      <text x="510" y="60" text-anchor="middle">b7</text><text x="564" y="60" text-anchor="middle">b8</text><text x="618" y="60" text-anchor="middle">b9</text>
+    </g>
+    <g stroke="var(--mute)" stroke-width="1.3" fill="none" marker-end="url(#ovah)">
+      <path d="M56 56 L80 56"/><path d="M112 56 L138 56"/><path d="M170 56 L196 56"/>
+      <path d="M322 56 L348 56"/><path d="M380 56 L406 56"/><path d="M526 56 L548 56"/><path d="M580 56 L602 56"/>
+    </g>
+    <g stroke="var(--accent)" stroke-width="1.4" fill="none" stroke-dasharray="4 3" marker-end="url(#ovah2)">
+      <path d="M226 64 Q 260 96 292 64"/><path d="M436 64 Q 466 96 496 64"/>
+    </g>
+    <text x="259" y="100" text-anchor="middle" class="sk-small" fill="var(--accent)">S + block</text><text x="466" y="100" text-anchor="middle" class="sk-small">S + block</text>
+    <text x="330" y="126" text-anchor="middle" class="sk-cap">ten sites; nine block steps; S = the network's shortcut (subsample by 2, append zero channels)</text>
+    <circle cx="200" cy="222" r="48" class="sk-face"/>
+    <circle cx="200" cy="222" r="2.5" class="sk-v"/><text x="200" y="285" text-anchor="middle" class="sk-small">cloud of radius R around its centroid</text>
+    <path d="M200 222 L234 188" stroke="var(--mute)" stroke-width="1.2"/><text x="238" y="186" class="sk-math">R</text>
+    <circle cx="166" cy="196" r="4" class="sk-dot"/>
+    <g fill="var(--c1)" opacity=".85"><circle cx="212" cy="202" r="2.4"/><circle cx="220" cy="236" r="2.4"/><circle cx="186" cy="256" r="2.4"/><circle cx="160" cy="240" r="2.4"/><circle cx="196" cy="176" r="2.4"/><circle cx="232" cy="214" r="2.4"/></g>
+    <circle cx="166" cy="196" r="54" fill="none" stroke="var(--c1)" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="290" y="204" class="sk-small">one image (blue) and its nearest neighbours (orange):</text>
+    <text x="290" y="222" class="sk-small">the 128th is about as far away as the cloud's radius R,</text>
+    <text x="290" y="240" class="sk-small">so a "neighbourhood" spans much of the cloud</text>
+  </g>
+</svg>
+<figcaption>Schematic, not data. Top: where the cloud is read and how the block steps run, with the shortcut at the two
+stage changes. Bottom: the scale problem in two dimensions; in the network the mean distance to the 128th neighbour is
+1.02–1.25 R at the final checkpoint.</figcaption>
+</figure>
+
+<h2 id="findings">Findings</h2>
+<p>At the final checkpoint (step 64,000) unless stated, over all 10,000 test images.</p>
+<ol class="findings">
+<li><b>No anchor passes the reproducible-plane gate at the scales 10,000 images give.</b> At ten sites, the two
+shortcut-projected frames and three checkpoints, for neighbourhoods of 32 to 1,024 images and planes
+of 2 to 32 dimensions, not one of 500 audited anchors passes the gate fixed before the activations were examined (reproducible
+split-half plane, eigenvalue gap, stability in radius, held-out capture). The 128th neighbour is on
+average 1.02–1.25 R away, intrinsic-dimension estimates are
+29–79 at the smallest scale, and no (frame, k, m) cell reaches the gate's eigenvalue
+gap of 2 on average (some individual criteria do pass on many anchors; no anchor meets all of them at once). The tangent / normal split and the strain tensor were therefore not computed. On synthetic clouds the same
+procedure finds the plane of a flat 8-dimensional cloud, and no anchor passes on a flat 32-dimensional cloud or a
+64-dimensional blob, whose neighbourhood scale is like the network's.
+<a href="experiments/audit.html">Audit and calibration</a>.</li>
+<li><b>Four steps move the cloud furthest, relative to its radius.</b> Mean squared travel, in units of each step's
+source radius, is 3.68 R² at b8→b9, 2.64 at stem→b1, and
+1.36 and 1.62 at the two stage-change blocks; the other five steps move the cloud
+0.27–0.71 R². A translation shared by all images is 12%–45% of it, and
+most of the centred displacement lies outside the source cloud's 128 leading principal directions (only
+5%–23% inside). A second training seed agrees at the last block (3.56 R²) and the
+stage changes, but its stem block moves the cloud only 0.95 R². <a href="experiments/depth.html#travel">Depth
+experiment</a>.</li>
+<li><b>Most blocks rescale neighbour distances nearly uniformly within a neighbourhood; the last block does
+not.</b> The four large steps stretch distances to the 128 nearest neighbours (geometric-mean factors 1.90,
+1.45, 1.44, 1.83), and at b2→b3, b5→b6 and b7→b8 the geometric-mean factor stays within
+e<sup>±0.04</sup>. The spread of the stretch across an image's 128 edges is by far the largest at b8→b9
+(RMS 0.113, against at most 0.043 elsewhere), and its 128-neighbour sets before and after
+overlap little (Jaccard 0.17); both hold in the second seed. Across the whole range of distances, b8→b9
+stretches near pairs less than far ones (mean log-stretch +0.53 at rank 1, +0.68 in the
+farthest rank bin), while stem→b1 tilts more steeply the other way (+0.68 to +0.46). The
+network's shortcut shrinks neighbour distances by a factor of about 2, nearly uniformly.
+<a href="#explorer?ckpt=64000&amp;site=8&amp;color=d.lam_mean">Explorer: log-stretch at b8</a>.</li>
+<li><b>Neighbours mostly move by a common offset, and the local directions capture little of an image's
+displacement.</b> Of the neighbours' displacements relative to an image, 51%–68% (in
+squared size, averaged over images) is a constant offset they share. At rank 8, the median held-out score of a local
+linear fit exceeds the median score of predicting that offset by at most 0.115. The 8 leading local
+directions capture 0.008–0.065 of an image's squared displacement on average, close to their
+shuffled control for the first seven blocks and modestly above it for the last two. In the broad-neighbourhood
+fixtures an exactly linear map can also give modest slope shares and near-shuffle capture, so these summaries do not
+distinguish linear from nonlinear motion. <a href="experiments/depth.html#relative">Depth experiment</a>.</li>
+<li><b>Over training, the last block's reshuffling deepens.</b> The overlap of b8→b9's neighbour sets
+before and after the block falls from 0.75 at initialisation to 0.38 at step 1,280 and
+0.17 at the end (not monotonically). Its travel falls from 2.92 R² at initialisation to at most
+0.89 between steps 32 and 1,280, then rises to 3.68. The stem block's travel peaks early
+(5.21 R² at step 32). <a href="experiments/training.html#depth">Training
+experiment</a>.</li>
+<li><b>Between checkpoints, the site-mean chords stay large until late in training, and b9 moves further than the
+stem.</b> Between steps 128 and 26,880 the site-mean chord per interval is 0.28–1.04
+source radii, over intervals 128 to 3,840 steps long; over the last interval
+(12,800 steps) it is 0.05–0.10 R. b9 travels further than the stem, relative to
+its radius, in 38 of 39 intervals (the sites in between are not always ordered by depth). In
+mid-training the site-mean straightness is below 1/√2 in 119 of 120 (interval,
+site) cells; a single image falls below that value only if its next chord has a backward component.
+<a href="experiments/training.html#clock">Training experiment</a>.</li>
+<li><b>Correctly classified images travel further at the last block.</b> At b8→b9 they move 1.91 R against
+1.58 R for the 844 misclassified ones (seed 1: 1.88 against 1.55);
+at earlier blocks the two groups move alike (within 4%). <a href="experiments/depth.html#groups">Depth
+experiment</a>.</li>
+</ol>
+
+<h2 id="measured">What was measured, and what was not</h2>
+<p>Two kinds of quantity are measured, each for every image unless stated:</p>
+<ul>
+<li><b>Whole-cloud motion (no neighbourhood):</b> travel; its exact split into a common translation, a radial-fit term
+and a remainder; how much of it coarse linear maps of the whole cloud predict on a held-out half of the images.</li>
+<li><b>Graph quantities on the 128 nearest neighbours in the source frame:</b> edge log-stretch and Green strain
+of the neighbour edges; neighbour retention (which also uses the target frame's neighbour sets); q (how differently
+neighbours move, relative to their separation); the budget and held-out score of a local linear fit; and capture
+fractions, the share of the displacement in the leading local principal directions, against a global-plane and a
+shuffled control. Edge quantities need only distances, so they are also measured across the shortcut.</li>
+<li><b>Sampled or partial:</b> the stretch profile uses 500 anchors against all images; the local fit and capture
+fractions exist on 8 of the 39 training intervals; the audit varies k from 32 to
+1,024 on 500 anchors per frame.</li>
+<li><b>Not measured:</b> the tangent / normal components of the motion, the strain tensor and the rotation of local
+planes, because no anchor passed the reproducible-plane gate (finding 1). Second-order quantities were deferred from
+the start.</li>
+</ul>
+<p>Two readings hold throughout. "Local" means at the radius of 128 neighbours, which at the final checkpoint is the
+scale of the whole cloud (earlier in training the mean distance to the 128th neighbour is smaller in some frames,
+down to 0.38 R on the depth clock). And the totals are means (medians for held-out scores) over the fixed
+population of the 10,000 test images; where subsets are used (thinning, on the audit page) the spread is a
+sensitivity to sample size, not a confidence interval.</p>
+
+<h2 id="look">Where to look</h2>
+<p>The <a href="#explorer">Explorer</a> draws the cloud at every site and measured checkpoint, coloured by a selection of the
+per-image fields, with playback through depth and training. It shows each stage on three fixed principal axes, and those show
+only part of the cloud: 6%–58% of each frame's squared spread around the reference
+centroid and at most 37% of a within-stage step's displacement energy, both at the final checkpoint. The
+components of the measured displacements outside those axes are included in every summary. The <a href="#experiments">Experiments</a> tab has the three pages behind the
+findings: the scale audit and calibration, motion through depth, and motion over training.</p>
+
+<h2 id="changed">What changed</h2>
+<p>The first version of this site measured the cloud after a logit lens, as class distributions in the Fisher
+(Hellinger) geometry of the output. That space has only 9 dimensions for 10 classes, and at the resolution of the test set the cloud filled it, so the
+split into motion along and across the cloud and its strain were undefined or could not be recovered there. On
+2026-11-24 the owner withdrew the Fisher readout and asked for the geometry to be measured in the raw activation space
+instead. Those three experiments are kept, marked deprecated, under the Experiments tab; nothing on this page
+depends on them.</p>
+  </article>
+
+</section>
+
+<section class="tab-panel" id="tab-explorer" data-tab="explorer" hidden>
+  <div class="ex" id="ex"><div class="ex-loading">Loading the explorer…</div></div>
+</section>
+
+<section class="tab-panel" id="tab-experiments" data-tab="experiments" hidden>
+  <header class="page-head"><h1>Experiments</h1></header>
+  <article class="prose">
+    <p class="lede">Each experiment asks one question of the moving cloud and has its own page.</p>
+    <div id="x-list" class="x-list"><p class="mute">Loading…</p></div>
+  </article>
+</section>
+</main>
+<footer class="foot">
+  <div>Built 2026-11-24. Static site; no tracking, no external requests.</div>
+  <div>Type: Source Serif 4, Inter, JetBrains Mono (SIL OFL). Maths: KaTeX (MIT). 3D: three.js (MIT).</div>
+</footer>
+<div id="tooltip" class="tooltip" hidden></div>
+<script defer src="vendor/katex/katex.min.js"></script>
+<script defer src="vendor/katex/auto-render.min.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

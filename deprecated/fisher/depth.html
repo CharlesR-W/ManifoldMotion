@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Motion through depth in the trained network · ManifoldMotion</title>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 14 A12 12 0 0 1 14 2' fill='none' stroke='%232a78d6' stroke-width='2'/%3E%3Ccircle cx='5' cy='8.5' r='2' fill='%23eb6834'/%3E%3Ccircle cx='9.5' cy='5' r='2' fill='%2316a39a'/%3E%3C/svg%3E">
+</head>
+<body data-tab="experiments" class="xpage">
+<div role="note" style="position:relative;z-index:200;margin:0;padding:12px 20px;background:#7a1f12;color:#fff;font:500 15px/1.45 Inter,system-ui,sans-serif;text-align:center;border-bottom:3px solid #f0a35e"><b>Deprecated.</b> This experiment measured the cloud in the Fisher space of logit-lens outputs. The owner withdrew that readout on 2026-11-24; it is superseded by the Euclidean experiments. <a href="../../index.html#experiments" style="color:#fff;text-decoration:underline;font-weight:650">Back to the current experiments</a></div>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="tabs" aria-label="Sections">
+  <div class="tabs-inner">
+    <a class="tabs-home" href="../index.html#overview">ManifoldMotion</a>
+    <div class="tablist">
+      <a href="../index.html#overview">Overview</a>
+      <a href="../index.html#explorer" class="tab-ex">Explorer</a>
+      <a href="../index.html#experiments" aria-selected="true">Experiments</a>
+    </div>
+  </div>
+</nav>
+<main id="main">
+<article class="prose xprose">
+<p class="xback"><a href="../index.html#experiments">All experiments</a></p>
+<h1>Motion through depth in the trained network</h1>
+<p class="xq">How does the trained ResNet-20 (training step 64,000) move the 10,000 CIFAR-10 test images through
+Fisher space from one block to the next?</p>
+<p class="xmeta">Final checkpoint, seed 0; nine depth steps (stem→b1 to b8→b9); neighbourhoods of k = 256 images with an
+adaptive Gaussian kernel. Robustness checks at the end of the page.</p>
+
+<div class="answer">
+<p><b>Answer.</b> At the resolution 10,000 images give, the lens cloud at every site from the stem to b8 has no
+stable thin tangent space: its local second moment decays over all nine directions without a gap. The split of motion
+into a part along the data manifold and a part normal to it, which the project set out to measure, is therefore not
+defined here. What was measured instead:</p>
+<p><b>Without any fit, on every image.</b> The last block moves images furthest (kinetic energy 1.50 for that
+block, 6.5 times the block before it). Neighbour distances grow at every block but the last; at b8→b9 their
+geometric-mean ratio is 1/9.4, and 71% of images end within Fisher–Rao distance 0.05 of a
+class vertex.</p>
+<p><b>For the cloud as a whole.</b> One rotation of the sphere carries 0.89 and 0.90 of the kinetic
+energy at b1→b2 and b2→b3, but 0.05 at b8→b9.</p>
+<p><b>On images whose nine directions are resolved (99.60% to 99.91%).</b> At the neighbourhood radius,
+a local linear map of the neighbourhood accounts for a minority of how neighbours move relative to each other (median
+slope fraction per image 0.13 to 0.47).</p>
+</div>
+
+<h2 id="blob">No stable thin directions at this resolution</h2>
+<p>For each image, the local second moment is the uncentred, graph-weighted second moment of the offsets from the
+image to its neighbours (sphere log maps), in the nine-dimensional tangent space of the sphere. A thin submanifold of
+dimension $m$, resolved at this scale, would show $m$ large eigenvalues and a gap below them. No site shows a gap. At
+b7 the median eigenvalues, relative to the largest, are 1, .80, .67, .50, .33, .22, .14, .08, .05. The typical image also sits near the edge of
+its own neighbourhood: the median one-sidedness (distance to the neighbours' weighted mean, in units of their spread)
+is 0.82 to 0.86 across sites.</p>
+
+<figure class="xfig" id="fig-spectrum">
+  <div class="xfig-title">Local second-moment spectrum · step 64,000 · sites stem to b8 · median over images</div>
+  <div class="xfig-plot" data-h="290"></div>
+  <figcaption><b>Read:</b> each line is one site; the x-axis ranks the nine eigenvalues of each image's local second
+  moment, the y-axis (log) gives the median eigenvalue relative to the image's largest. <b>Shows:</b> every site decays
+  smoothly across all nine directions with no gap, so at this scale no subset of directions can be singled out as a
+  tangent space.</figcaption>
+</figure>
+
+<figure class="xfig" id="fig-nbhd">
+  <div class="xfig-title">Neighbourhood size and shape per site · step 64,000 · median over images</div>
+  <div class="xscroll"><table class="xtab" id="tab-nbhd"></table></div>
+  <figcaption><b>Read:</b> radius is the root-mean-square Fisher–Rao distance to the neighbours under the graph
+  weights; effective neighbours is $1/\sum_j P_{ij}^2$; one-sidedness is the distance to the neighbours' mean in units
+  of their spread (0 = centred, about 1 = at an edge). <b>Shows:</b> the radius grows about 9-fold from the stem
+  (0.047) to b8 (0.43), but the shape is the same everywhere: about a hundred effective
+  neighbours, the typical image at an edge.</figcaption>
+</figure>
+
+<p>Under the release rules of the original plan, a tangent-dependent quantity needs a stable retained subspace with a
+clear eigengap. Those rules pass on at most 0.07% of images at any depth step. Without a resolved
+tangent space there is no normal space either, so the split of velocity into tangential and normal parts, and the
+strain of a submanifold, are not defined here. This is the first result of the project; the rest of the page reports
+what was measured instead.</p>
+<p>The replacement is the <b>flow reading</b>: the cloud is treated as full-dimensional, all nine directions are kept,
+and an image is withheld from fitted quantities where they are not all resolved. Every regression quantity is then the
+gain of a graph-weighted linear predictor of neighbour offsets at the neighbourhood radius, not a pointwise
+derivative.</p>
+
+<figure class="xfig wide" id="fig-cover">
+  <div class="xfig-title">Share of images on which each field is released · step 64,000 · per depth step</div>
+  <div class="xscroll" data-host></div>
+  <figcaption><b>Read:</b> each cell is the share of the 10,000 images on which the field is defined at that step
+  (the field files the explorer shows); the lower block gives the share passing each family of release rules. Darker =
+  more images. <b>Shows:</b> motion and neighbourhood fields, relative motion and the two baseline scores are defined
+  on (almost) every image, and the relative-motion split and the fitted score on 99.60% to 99.91%. The
+  largest log gain passes its gates on at most 1.03% of images at any step; the expansion rate, strain rate
+  and spin pass on at most 0.04% before b8→b9 and on 10% at b8→b9. The tangent-based rules
+  of the original plan pass almost nowhere.</figcaption>
+</figure>
+
+<h2 id="travel">How far images move, and how much of it is one rotation</h2>
+<p>The kinetic energy of a step is the mean over images of $|v/\Delta t|^2/2$, where $v = \log_{X_l} X_{l+1}$ is the
+displacement on the sphere of radius 2 and $\Delta t$ is one block, so it is a squared Fisher–Rao distance per squared
+block. The rigid part is the least-squares rotation field of the whole sphere, $v \approx \Omega x$ with $\Omega$
+antisymmetric, fitted to all images at once; the rigid fraction is its share of the total kinetic energy, one number
+for the whole cloud.</p>
+<figure class="xfig" id="fig-ke">
+  <div class="xgrid"><div><p class="xsub">Kinetic energy for one block</p><div class="xfig-plot" data-k="ke" data-h="230"></div></div>
+  <div><p class="xsub">Rigid fraction of the kinetic energy</p><div class="xfig-plot" data-k="rigid" data-h="230"></div></div></div>
+  <div class="xfig-title" style="margin-top:4px">Travel per block · step 64,000 · all 10,000 images</div>
+  <figcaption><b>Read:</b> left, the mean of $|v|^2/2$ per depth step (Fisher–Rao distance² per block²), split into
+  the part the global rotation field carries and the rest; right, the rigid share. <b>Shows:</b> the stem to b6 move
+  images little, and largely as one rotation at the first three steps (0.80, 0.89, 0.90) but
+  not at b3→b4 (0.28); b6→b7 and especially b8→b9 carry most of the motion, and at b8→b9 only 0.05 of
+  it is rigid.</figcaption>
+</figure>
+
+<h2 id="relative">How neighbours move relative to each other</h2>
+<p>Relative motion at an image is the weighted mean squared difference between its displacement and its neighbours'
+displacements (each carried to it along the sphere), divided by twice the kernel time. It is measured directly, with
+no fit, on 99.98% or more of images. A weighted linear predictor with a free constant term splits it
+exactly into three parts: a <b>shift</b> shared by the neighbours (the constant), a <b>slope</b> (the part a linear
+map of the neighbour offsets explains, in sample) and a <b>residual</b> (the rest). The split is computed on the
+images whose nine directions are all resolved (99.60% to 99.91% of images at this
+checkpoint), and there the three parts add up to the total to within a relative error of 2.15×10⁻¹⁶. Because
+relative motion is per unit kernel time, its absolute value depends on the bandwidth and the sample size; only the
+fractions compare across sites, scales and seeds.</p>
+<figure class="xfig" id="fig-split">
+  <div class="xfig-title">Relative-motion budget · step 64,000 · per depth step</div>
+  <div class="xfig-plot" data-h="270"></div>
+  <figcaption><b>Read:</b> stacked bars give each part's share of the summed relative motion over the images where the
+  split is defined; dots give the median over those images of each image's own slope fraction. These are different
+  statistics: a ratio of means and a median of ratios. <b>Shows:</b> the slope is the smallest of the three parts at
+  eight of the nine steps (b3→b4 is the exception, at 40% of the total; median slope fraction per
+  image 0.13 to 0.47, median residual fraction 0.21 to 0.52): most
+  of how neighbours move apart or together is not reproduced by a local linear map of the lens cloud at this
+  radius.</figcaption>
+</figure>
+
+<p>A held-out score checks whether the linear predictor generalises within a neighbourhood: with five folds of
+neighbours, it is one minus the squared prediction error of next-site offsets over their squared size. It is not a
+centred $R^2$, and on the calibration fixture it scored above the known-map reference once there was scatter, so it is
+read against two baselines: <b>no deformation</b> (each offset carried along unchanged) and a <b>constant offset</b>
+(every offset predicted by the training neighbours' mean). The fitted score needs all nine directions resolved; the
+baselines do not.</p>
+<figure class="xfig" id="fig-scores">
+  <div class="xfig-title">Held-out prediction of next-site neighbour offsets · step 64,000 · median over images</div>
+  <div class="xfig-plot" data-h="250"></div>
+  <figcaption><b>Read:</b> per depth step, the median score of the free-intercept linear fit and of the two baselines
+  (1 = perfect, 0 = no better than predicting zero offset). <b>Shows:</b> the linear fit beats both baselines from the
+  stem to b8 (fit 0.49 to 0.76; constant offset at most 0.3335; no deformation at most
+  0.342), and at b8→b9 all three are low (fit 0.21).</figcaption>
+</figure>
+
+<h2 id="contraction">Neighbour distances, and concentration near vertices</h2>
+<p>A fit-free measure of local spreading is the mean, over an image's 16 nearest neighbours, of
+$\log(d_{l+1}/d_l)$: the log change of each neighbour distance from one site to the next. Its exponential is the
+geometric-mean ratio of neighbour distances, not a factor shared by every pair.</p>
+<figure class="xfig" id="fig-nn">
+  <div class="xgrid"><div><p class="xsub">Mean log change of neighbour distances</p><div class="xfig-plot" data-k="nn" data-h="230"></div></div>
+  <div><p class="xsub">Share of images within 0.05 of a vertex</p><div class="xfig-plot" data-k="near" data-h="230"></div></div></div>
+  <div class="xfig-title" style="margin-top:4px">Spreading and concentration · step 64,000 · all images</div>
+  <figcaption><b>Read:</b> left, positive = neighbours move apart on average (+1 is a geometric-mean ratio of
+  e ≈ 2.7); right, the share of images whose distribution at the next site is within Fisher–Rao distance 0.05 of a
+  one-hot distribution. <b>Shows:</b> every block but the last spreads neighbourhoods (+0.72 to
+  +1.69); b8→b9 contracts them (−2.24, a geometric-mean distance ratio of 1/9.4) while
+  71% of images end near a vertex.</figcaption>
+</figure>
+
+<h2 id="strain">Strain-type fields</h2>
+<p>Four fields are statistics of the fitted slope of the free-intercept predictor: the largest log gain, the
+expansion rate (trace of the symmetric part of the fitted displacement gradient), the strain rate and the spin
+(squared norms of its symmetric and antisymmetric parts). They are released only where the fit passes gates fixed on
+the calibration fixture: a held-out score of at least 0.5, at least 0.5 above
+the constant-offset score, a centred-design condition number of at most 50 and enough
+effective neighbours. The largest gain is gated on the prediction of next-site offsets and must also beat the
+no-deformation score by 0.3, unless that score is itself at least
+0.95; the three rate fields are gated on the held-out prediction of displacement differences.
+At the final checkpoint the largest gain passes on at most 1.03% of images at any step. The expansion
+rate, strain rate and spin pass on at most 0.04% before b8→b9 and on 10% at b8→b9, where
+the mean expansion rate over the released images is −7.9 per block. The volume change $\log J$, the smallest
+stretches, Hencky strain and the split into volumetric and shear strain are not released at all, because the
+calibration showed they cannot be recovered here (see the <a href="calibration.html">calibration page</a>).</p>
+
+<h2 id="robust">Robustness</h2>
+<figure class="xfig" id="fig-scale">
+  <div class="xgrid"><div><p class="xsub">Neighbourhood radius (median)</p><div class="xfig-plot" data-k="radius" data-h="220"></div></div>
+  <div><p class="xsub">Median slope fraction</p><div class="xfig-plot" data-k="slope" data-h="220"></div></div></div>
+  <div class="xfig-title" style="margin-top:4px">Neighbourhood size · step 64,000 · k = 128, 256, 512 and a wider kernel</div>
+  <figcaption><b>Read:</b> each line is one neighbourhood setting. <b>Shows:</b> halving or doubling k changes the
+  radius by at most 7.3% and the median slope and shift fractions by at most
+  0.0153 (the median held-out score by at most 0.05); the wider kernel (radius up to
+  1.41 times larger) changes the median slope fractions by about 0.044 at most and
+  raises the median held-out score by up to 0.115.</figcaption>
+</figure>
+<p>Five random subsamples of 5,000 images (each drawn without replacement, with neighbourhoods rebuilt on
+each) give standard deviations of at most 0.009 for the median fractions and scores, 0.0085 for
+the kinetic energy (at b8→b9, where it is 1.50) and 0.004 for the rigid fraction.</p>
+<figure class="xfig" id="fig-seed">
+  <div class="xgrid"><div><p class="xsub">Kinetic energy for one block</p><div class="xfig-plot" data-k="ke" data-h="220"></div></div>
+  <div><p class="xsub">Rigid fraction</p><div class="xfig-plot" data-k="rigid" data-h="220"></div></div>
+  <div><p class="xsub">Mean log change of neighbour distances</p><div class="xfig-plot" data-k="nn" data-h="220"></div></div>
+  <div><p class="xsub">Median slope fraction</p><div class="xfig-plot" data-k="slope" data-h="220"></div></div></div>
+  <div class="xfig-title" style="margin-top:4px">A second training seed · final checkpoint · seed 0 against seed 1</div>
+  <figcaption><b>Read:</b> solid = seed 0, dashed = seed 1 (same architecture and data, different initialisation).
+  <b>Shows:</b> the last block behaves the same in both (seed 1: kinetic energy 1.48, rigid fraction
+  0.05, neighbour log change −2.14, 71% near a vertex); earlier
+  blocks differ in detail between seeds.</figcaption>
+</figure>
+
+<h2 id="decisions">Decisions made on the owner's behalf</h2>
+<div class="xscroll"><table class="xtab dec">
+<thead><tr><th>Decision</th><th>Default</th><th>Alternative</th><th>How to test</th></tr></thead>
+<tbody>
+<tr><td>Neighbourhood size</td><td>k = 256, adaptive Gaussian kernel (ε = 0.25)</td><td>k = 128 or 512; wider kernel (ε = 1)</td><td>Done above: median slope and shift fractions move by at most 0.0153</td></tr>
+<tr><td>Reading of a cloud with no gap</td><td>Flow reading: all nine directions, regression gains at the radius</td><td>Thick reading: keep only the leading eigenspace where it is stable</td><td>Thick-reading fields are in the explorer; the turn of leading directions passes on at most 0.7% of images</td></tr>
+<tr><td>Fit used for released regression fields</td><td>Free intercept</td><td>Fit forced through the image itself</td><td>Calibration: forced fit has 6.2% error against 1.0% under endpoint scatter</td></tr>
+<tr><td>Summary of the per-image budget fractions</td><td>Median over images (<code>median:flow:{slope,shift,residual}_fraction</code>)</td><td>Ratio of the summed parts on the common support</td><td>Both are shown in the budget figure; they are different statistics, and per-image ratios have heavy tails</td></tr>
+<tr><td>Near-vertex threshold</td><td>Fisher–Rao distance 0.05</td><td>Other thresholds</td><td>Recompute from the lens files (vertex distance is a per-image field in the explorer)</td></tr>
+</tbody></table></div>
+
+<script type="module">
+import { chart, register, shareTable, depthColor, C, fmt, pct } from "../js/xcharts.js";
+const D = JSON.parse(document.getElementById("data").textContent);
+const S = D.steps, fig = id => document.getElementById(id);
+const plot = (id, k) => fig(id).querySelector(k ? `.xfig-plot[data-k="${k}"]` : ".xfig-plot");
+const H = e => +e.dataset.h || 240;
+
+register(() => { const e = plot("fig-spectrum");
+  chart(e, { height: H(e), x: { type: "band", labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9"], label: "eigenvalue rank" },
+    y: { domain: [0.005, 1.2], log: true, label: "relative eigenvalue", fmt: v => fmt(v, 2) },
+    series: D.sites.map((s, i) => ({ name: s, values: D.spectrum[i], color: depthColor(i), kind: "line", tfmt: v => fmt(v, 3) })) }); });
+
+(() => { const t = document.getElementById("tab-nbhd");
+  t.innerHTML = `<thead><tr><th>site</th>${D.sites.map(s => `<th>${s}</th>`).join("")}</tr></thead><tbody>
+  <tr><td>radius</td>${D.radius.map(v => `<td>${fmt(v, 3)}</td>`).join("")}</tr>
+  <tr><td>effective neighbours</td>${D.neff.map(v => `<td>${Math.round(v)}</td>`).join("")}</tr>
+  <tr><td>one-sidedness</td>${D.one_sided.map(v => `<td>${fmt(v, 2)}</td>`).join("")}</tr></tbody>`; })();
+
+(() => { const host = fig("fig-cover").querySelector("[data-host]");
+  const rows = [], vals = [];
+  let g0 = null;
+  D.cover.labels.forEach((l, i) => { if (D.cover.groups[i] !== g0) { g0 = D.cover.groups[i]; rows.push({ grp: g0 }); vals.push(null); } rows.push(l); vals.push(D.cover.values[i]); });
+  const R = D.rules;
+  rows.push({ grp: "Release rules" }); vals.push(null);
+  for (const [l, v] of [["Original plan: tangent space", R.strict_tangent], ["Original plan: neighbourhood", R.strict_nb], ["Flow: relative-motion split", R.flow_split], ["Flow: largest-gain gates", R.flow_gain], ["Flow: strain gates", R.flow_strain], ["Thick: stable leading eigenspace", R.thick_tangent]]) { rows.push(l); vals.push(v); }
+  shareTable(host, { rows: rows.map(r => typeof r === "string" ? r : ""), cols: S, values: vals.map(v => v || Array(9).fill(null)), rowHead: "field" });
+  // group headings
+  const trs = host.querySelectorAll("tbody tr");
+  rows.forEach((r, i) => { if (typeof r !== "string") { trs[i].className = "grp"; trs[i].innerHTML = `<th colspan="10">${r.grp}</th>`; } }); })();
+
+register(() => {
+  const e1 = plot("fig-ke", "ke"), e2 = plot("fig-ke", "rigid");
+  chart(e1, { height: H(e1), x: { type: "band", labels: S }, y: { domain: [0, 1.6], label: "kinetic energy" },
+    series: [{ name: "rigid part", values: D.ke_rigid, color: C.a, kind: "stack" }, { name: "non-rigid part", values: D.ke_nonrigid, color: C.b, kind: "stack" },
+      { name: "total", values: D.ke, color: "var(--fg)", kind: "dot", nolegend: true }] });
+  chart(e2, { height: H(e2), x: { type: "band", labels: S }, y: { domain: [0, 1], label: "rigid fraction" },
+    series: [{ name: "rigid fraction", values: D.rigid, color: C.a, kind: "bar" }], legend: false });
+});
+
+register(() => { const e = plot("fig-split");
+  chart(e, { height: H(e), x: { type: "band", labels: S }, y: { domain: [0, 1], label: "share of relative motion" },
+    series: [{ name: "shift (shared by neighbours)", values: D.shares.map(r => r[0]), color: C.d, kind: "stack", tfmt: v => pct(v, 0) },
+      { name: "slope (linear map)", values: D.shares.map(r => r[1]), color: C.a, kind: "stack", tfmt: v => pct(v, 0) },
+      { name: "residual", values: D.shares.map(r => r[2]), color: C.b, kind: "stack", tfmt: v => pct(v, 0) },
+      { name: "median slope fraction per image", values: D.slope_med, color: "var(--fg)", kind: "dot", tfmt: v => fmt(v, 2) }] }); });
+
+register(() => { const e = plot("fig-scores");
+  chart(e, { height: H(e), x: { type: "band", labels: S }, y: { domain: [0, 1], label: "held-out score" },
+    series: [{ name: "free-intercept linear fit", values: D.ho, color: C.a, kind: "line", width: 2.2 },
+      { name: "constant offset", values: D.hco, color: C.b, kind: "line", dash: "5 3" },
+      { name: "no deformation", values: D.hid, color: C.d, kind: "line", dash: "2 3" }] }); });
+
+register(() => {
+  const e1 = plot("fig-nn", "nn"), e2 = plot("fig-nn", "near");
+  chart(e1, { height: H(e1), x: { type: "band", labels: S }, y: { domain: [-2.5, 2], label: "mean log(d next / d)" },
+    series: [{ name: "log change", values: D.nn, color: C.a, kind: "bar", tfmt: v => (v > 0 ? "+" : "") + fmt(v, 2) }], legend: false });
+  chart(e2, { height: H(e2), x: { type: "band", labels: S }, y: { domain: [0, 1], label: "share of images", fmt: v => pct(v, 0) },
+    series: [{ name: "near a vertex at the next site", values: D.near, color: C.e, kind: "bar", tfmt: v => pct(v, 1) }], legend: false });
+});
+
+register(() => {
+  const cols = [C.d, C.a, C.c, C.f];
+  const e1 = plot("fig-scale", "radius"), e2 = plot("fig-scale", "slope");
+  chart(e1, { height: H(e1), x: { type: "band", labels: S }, y: { domain: [0, 0.7], label: "radius (Fisher–Rao)" },
+    series: D.scales.map((s, i) => ({ name: s.name, values: s.radius, color: cols[i], kind: "line", width: i === 1 ? 2.4 : 1.5, tfmt: v => fmt(v, 3) })) });
+  chart(e2, { height: H(e2), x: { type: "band", labels: S }, y: { domain: [0, 0.6], label: "median slope fraction" },
+    series: D.scales.map((s, i) => ({ name: s.name, values: s.slope, color: cols[i], kind: "line", width: i === 1 ? 2.4 : 1.5 })), legend: false });
+});
+
+register(() => {
+  const P = k => plot("fig-seed", k);
+  const pair = (k, a, b, y, lab, f) => chart(P(k), { height: H(P(k)), x: { type: "band", labels: S }, y: { domain: y, label: lab },
+    series: [{ name: "seed 0", values: a, color: C.a, kind: "line", tfmt: f }, { name: "seed 1", values: b, color: C.b, kind: "line", dash: "5 3", tfmt: f }], legend: k === "ke" });
+  pair("ke", D.ke, D.seed1.ke, [0, 1.6], "kinetic energy");
+  pair("rigid", D.rigid, D.seed1.rigid, [0, 1], "rigid fraction");
+  pair("nn", D.nn, D.seed1.nn, [-2.5, 2], "mean log change");
+  pair("slope", D.slope_med, D.seed1.slope, [0, 0.6], "median slope fraction");
+});
+</script>
+
+</article>
+</main>
+<footer class="foot">
+  <div>ResNet-20 on CIFAR-10, seed 0 unless stated; 10,000 test images. Numbers are drawn from the measurement files at build time.</div>
+  <div>Static page; no tracking, no external requests.</div>
+</footer>
+<div id="tooltip" class="tooltip" hidden></div>
+<script type="application/json" id="data">{"steps":["stem\u2192b1","b1\u2192b2","b2\u2192b3","b3\u2192b4","b4\u2192b5","b5\u2192b6","b6\u2192b7","b7\u2192b8","b8\u2192b9"],"sites":["stem","b1","b2","b3","b4","b5","b6","b7","b8"],"spectrum":[[1.0,0.825486,0.721466,0.595267,0.432527,0.23722,0.0805091,0.0333341,0.0129784],[1.0,0.792765,0.676625,0.504578,0.3086,0.195956,0.119877,0.0625964,0.0145564],[1.0,0.825661,0.70672,0.526233,0.318535,0.179021,0.0882956,0.0429101,0.0104021],[1.0,0.835574,0.72243,0.582866,0.352245,0.190937,0.088455,0.0280704,0.00635292],[1.0,0.798158,0.673522,0.48975,0.313512,0.194951,0.114833,0.0351094,0.0150993],[1.0,0.832498,0.718501,0.537242,0.335755,0.202855,0.0997796,0.0310928,0.0113024],[1.0,0.819669,0.708277,0.544069,0.339111,0.198501,0.115018,0.0533609,0.0186989],[1.0,0.804332,0.665165,0.498016,0.328299,0.217715,0.137908,0.0777685,0.0465153],[1.0,0.746503,0.5976,0.446899,0.314801,0.220208,0.145025,0.0979055,0.0606347]],"one_sided":[0.819366,0.852104,0.843376,0.827752,0.841476,0.832715,0.84823,0.847747,0.861222],"radius":[0.0466953,0.0458153,0.0680924,0.0848291,0.112026,0.153264,0.187024,0.41134,0.426382],"neff":[109.543,106.91,97.8353,98.1094,102.457,101.861,108.87,112.378,120.254],"strict_dim":[[0,0,6,34,210,879,5103,3467,301,0],[0,0,5,83,400,1094,2361,3949,2107,1],[0,0,5,61,421,1650,3647,3826,390,0],[0,0,5,33,328,1483,3832,4166,153,0],[0,0,3,63,518,1144,2477,5447,348,0],[0,0,1,72,496,1236,3204,4731,260,0],[0,0,2,46,410,1266,2458,4235,1560,23],[0,0,2,49,293,886,1888,3363,2217,1302],[0,0,1,22,210,576,1747,2585,2755,2104]],"ke":[0.0662201,0.116515,0.0717255,0.0902361,0.060223,0.103926,0.647971,0.231232,1.50128],"ke_rigid":[0.0528574,0.104017,0.0647917,0.0253429,0.0370986,0.0753328,0.337378,0.0756009,0.0751052],"ke_nonrigid":[0.0133626,0.0124985,0.00693377,0.0648932,0.0231245,0.0285934,0.310593,0.155631,1.42617],"rigid":[0.798209,0.89273,0.903329,0.280851,0.616019,0.724868,0.520668,0.326949,0.0500275],"shares":[[0.428904,0.267336,0.303759],[0.484048,0.109088,0.406864],[0.453691,0.225252,0.321057],[0.409197,0.403021,0.187783],[0.453139,0.184019,0.362842],[0.468826,0.137971,0.393202],[0.45105,0.204012,0.344938],[0.467815,0.140248,0.391937],[0.453034,0.130993,0.415973]],"slope_med":[0.324675,0.131388,0.263549,0.466382,0.206921,0.149965,0.231842,0.14364,0.164382],"shift_med":[0.29625,0.346197,0.357117,0.294758,0.377036,0.356956,0.383125,0.388547,0.212905],"relmotion":[44.0068,60.0298,16.4625,76.2853,21.161,11.0584,98.3689,10.9715,56.9717],"ho":[0.621823,0.490394,0.68805,0.763306,0.653048,0.65801,0.603462,0.617088,0.214163],"hid":[0.067113,0.108363,0.248346,0.0546826,0.229125,0.341886,0.0998369,0.264518,0.0223307],"hco":[0.26994,0.314987,0.301775,0.273054,0.320088,0.27974,0.333493,0.305613,0.0792166],"nn":[1.14824,1.40743,0.896962,1.40456,1.00734,0.752477,1.68516,0.723193,-2.23804],"near":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.7071],"vfrom":[0.993274,1.01253,1.32697,1.4429,1.2495,1.27704,1.34569,1.5329,1.58572],"vto":[1.01253,1.32697,1.4429,1.2495,1.27704,1.34569,1.5329,1.58572,0.158989],"cover":{"labels":["Speed","Non-rigid speed","Path length so far","Move toward label vertex","Neighbourhood radius","Local dimension (participation ratio)","One-sidedness","Distance to nearest vertex","Relative motion","Log change of neighbour distances","Relative motion: shared shift","Relative motion: linear deformation","Relative motion: not linear","Held-out prediction score","Score of 'no deformation'","Score of a constant offset","Largest log gain","Expansion rate","Strain rate","Spin","Displacement along leading directions","Turn of leading directions"],"groups":["Motion","Motion","Motion","Motion","Neighbourhood","Neighbourhood","Neighbourhood","Neighbourhood","Relative motion","Relative motion","Relative motion","Relative motion","Relative motion","Relative motion","Relative motion","Relative motion","Strain (flow reading)","Strain (flow reading)","Strain (flow reading)","Strain (flow reading)","Thick/thin (secondary)","Thick/thin (secondary)"],"values":[[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],[0.9998,1.0,1.0,0.9999,1.0,1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],[0.9972,0.996,0.9973,0.9977,0.9963,0.9976,0.9974,0.9979,0.9991],[0.9972,0.996,0.9973,0.9977,0.9963,0.9976,0.9974,0.9979,0.9991],[0.9972,0.996,0.9973,0.9977,0.9963,0.9976,0.9974,0.9979,0.9991],[0.9972,0.996,0.9973,0.9977,0.9963,0.9976,0.9974,0.9979,0.9991],[0.9998,1.0,1.0,0.9999,1.0,1.0,1.0,1.0,1.0],[0.9998,1.0,1.0,0.9999,1.0,1.0,1.0,1.0,1.0],[0.0009,0.0,0.0,0.0,0.0103,0.0004,0.0053,0.0049,0.0001],[0.0,0.0,0.0,0.0,0.0002,0.0,0.0004,0.0,0.1004],[0.0,0.0,0.0,0.0,0.0002,0.0,0.0004,0.0,0.1004],[0.0,0.0,0.0,0.0,0.0002,0.0,0.0004,0.0,0.1004],[0.0481,0.0042,0.0041,0.0209,0.039,0.0432,0.005,0.001,0.0],[0.0,0.0001,0.0,0.0021,0.0066,0.0002,0.0,0.0,0.0]]},"rules":{"strict_tangent":[0.0001,0.0001,0.0,0.0,0.0007,0.0004,0.0003,0.0,0.0],"strict_nb":[0.0093,0.0179,0.0117,0.0074,0.0238,0.0351,0.0278,0.0443,0.0288],"flow_split":[0.9972,0.996,0.9973,0.9977,0.9963,0.9976,0.9974,0.9979,0.9991],"flow_gain":[0.0009,0.0,0.0,0.0,0.0103,0.0004,0.0053,0.0049,0.0001],"flow_strain":[0.0,0.0,0.0,0.0,0.0002,0.0,0.0004,0.0,0.1004],"thick_tangent":[0.0481,0.0042,0.0041,0.0209,0.039,0.0432,0.005,0.006,0.0176]},"scales":[{"name":"k = 128","radius":[0.0434595,0.0426714,0.063606,0.0791276,0.104512,0.142461,0.173809,0.381332,0.395419],"slope":[0.318547,0.140325,0.264857,0.463204,0.20971,0.158128,0.236108,0.150647,0.179665],"heldout":[0.59882,0.464668,0.665926,0.747342,0.629491,0.632883,0.583003,0.587023,0.166035],"shift":[0.302443,0.348269,0.359516,0.299033,0.377348,0.359168,0.385286,0.391677,0.209635]},{"name":"k = 256 (main)","radius":[0.0466953,0.0458153,0.0680924,0.0848291,0.112026,0.153264,0.187024,0.41134,0.426382],"slope":[0.324675,0.131388,0.263549,0.466382,0.206921,0.149965,0.231842,0.14364,0.164382],"heldout":[0.621823,0.490394,0.68805,0.763306,0.653048,0.65801,0.603462,0.617088,0.214163],"shift":[0.29625,0.346197,0.357117,0.294758,0.377036,0.356956,0.383125,0.388547,0.212905]},{"name":"k = 512","radius":[0.0488736,0.0478463,0.0708322,0.0883171,0.116885,0.160458,0.195866,0.432701,0.448656],"slope":[0.330678,0.128776,0.264553,0.469888,0.207462,0.147167,0.231584,0.141374,0.157821],"heldout":[0.633764,0.501838,0.697816,0.770342,0.665776,0.670372,0.612328,0.633022,0.245259],"shift":[0.292673,0.345921,0.356546,0.292659,0.376944,0.354778,0.38154,0.38643,0.216193]},{"name":"k = 512, wider kernel","radius":[0.0641653,0.0632663,0.0958498,0.11918,0.156052,0.212413,0.257123,0.550399,0.569321],"slope":[0.368809,0.125026,0.276353,0.476758,0.211723,0.153923,0.236547,0.142346,0.153838],"heldout":[0.699435,0.580658,0.774618,0.815124,0.739566,0.757792,0.662133,0.698473,0.328797],"shift":[0.289646,0.350113,0.363826,0.307242,0.388536,0.350902,0.386752,0.385261,0.255643]}],"subsample":{"flow:ke":[0.000108199,0.000810855,0.000234726,0.000723551,0.000424072,0.000920184,0.00238195,0.00212092,0.00848826],"flow:rigid_fraction_global":[0.00076419,0.000955157,0.000610335,0.00368538,0.00328095,0.00260343,0.00227177,0.00314335,0.00183921],"median:flow:slope_fraction":[0.00633764,0.00198194,0.00456839,0.00473213,0.00586562,0.00237017,0.00266118,0.00135084,0.0022994],"median:flow:shift_fraction":[0.00308278,0.00302735,0.00217904,0.00168351,0.00266128,0.0026481,0.00197205,0.00207365,0.00419553],"median:flow:heldout_ic":[0.00415979,0.00346695,0.00228574,0.00202738,0.00358924,0.00405246,0.00323005,0.00123732,0.00855106],"median:flow:heldout_identity":[0.00119517,0.00133849,0.00218854,0.00101509,0.00103531,0.00313587,0.000882925,0.00128386,0.00311918],"median:flow:heldout_const":[0.00427537,0.00280614,0.00216388,0.00376643,0.0031703,0.00234893,0.00104564,0.000828814,0.0027093]},"seed1":{"ke":[0.0806667,0.143135,0.166644,0.130929,0.140202,0.0438243,0.475663,0.222706,1.48232],"rigid":[0.666717,0.932157,0.802292,0.678658,0.815114,0.491419,0.381721,0.232983,0.0491981],"slope":[0.277335,0.215,0.220805,0.25179,0.229525,0.148374,0.239839,0.126599,0.161042],"nn":[0.87481,0.463195,0.958717,0.814284,0.378197,0.428655,1.21414,0.681025,-2.13905],"relmotion":[16.7753,4.77751,18.6698,11.6614,3.95411,3.82122,34.8646,10.5031,59.0978],"near":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.7089]}}</script>
+<script defer src="../vendor/katex/katex.min.js"></script>
+<script defer src="../vendor/katex/auto-render.min.js"></script>
+<script>addEventListener("load", () => window.renderMathInElement && renderMathInElement(document.querySelector(".xprose"), { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }], throwOnError: false }));</script>
+</body>
+</html>

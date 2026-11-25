@@ -1,0 +1,49 @@
+{
+ "experiments": [
+  {
+   "title": "The scale audit and calibration",
+   "date": "2026-11-25",
+   "question": "Does the cloud of raw activations have reproducible local planes at the scales 10,000 images give, and what do the descriptive numbers look like on synthetic clouds whose truth is known?",
+   "status": "measured",
+   "path": "experiments/audit.html"
+  },
+  {
+   "title": "Motion through depth in the trained network",
+   "date": "2026-11-25",
+   "question": "In the trained ResNet-20, how far does each block move the 10,000 test images in raw activation space, how much of that is a common shift, and how does it change distances between neighbours?",
+   "status": "measured",
+   "path": "experiments/depth.html"
+  },
+  {
+   "title": "Motion over training",
+   "date": "2026-11-25",
+   "question": "How does the block-to-block motion change as the network trains, and how fast does each site's cloud move between checkpoints?",
+   "status": "measured",
+   "path": "experiments/training.html"
+  },
+  {
+   "title": "Motion through depth in the trained network",
+   "date": "2026-11-24",
+   "question": "Superseded: measured in the Fisher space of logit-lens outputs, which the owner withdrew on 2026-11-24. How does the trained ResNet-20 move the 10,000 test images through Fisher space from one block to the next?",
+   "status": "deprecated",
+   "deprecated": true,
+   "path": "deprecated/fisher/depth.html"
+  },
+  {
+   "title": "Motion over training",
+   "date": "2026-11-24",
+   "question": "Superseded: measured in the Fisher space of logit-lens outputs, which the owner withdrew on 2026-11-24. How does the motion through depth change as the network trains?",
+   "status": "deprecated",
+   "deprecated": true,
+   "path": "deprecated/fisher/training.html"
+  },
+  {
+   "title": "What can be measured in a nine-dimensional blob: calibration",
+   "date": "2026-11-24",
+   "question": "Superseded: calibration for the Fisher-lens measurement, which the owner withdrew on 2026-11-24. Which kinematic quantities could be recovered from a cloud shaped like the lens cloud?",
+   "status": "deprecated",
+   "deprecated": true,
+   "path": "deprecated/fisher/calibration.html"
+  }
+ ]
+}
